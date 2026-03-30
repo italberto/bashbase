@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(for f:*)",
+      "Bash(do echo:*)",
+      "Read(//home/kaliope/Documentos/bashbase/**)",
+      "Bash(done)",
+      "Bash(mv exemplos/*.sh examples/)",
+      "Bash(mv testes/*.sh tests/unit/)",
+      "Bash(grep:*)",
+      "Bash(chmod:*)"
+    ]
+  }
+}

@@ -1,0 +1,5006 @@
+================================================================
+ BASHBASE — SNAPSHOT DO PROJETO
+ Gerado em: 2026-03-29 21:41:30
+================================================================
+
+================================================================
+ ESTRUTURA DO PROJETO
+================================================================
+.
+├── .claude
+│   └── settings.local.json
+├── docs
+│   ├── alerta.md
+│   ├── argsu.md
+│   ├── backupu.md
+│   ├── conectividade.md
+│   ├── configu.md
+│   ├── cores.md
+│   ├── crypto.md
+│   ├── datau.md
+│   ├── diru.md
+│   ├── distu.md
+│   ├── downu.md
+│   ├── dryrun.md
+│   ├── filesu.md
+│   ├── inputs.md
+│   ├── logu.md
+│   ├── mockfiles.md
+│   ├── pkgu.md
+│   ├── procesu.md
+│   ├── resourcesu.md
+│   ├── retryu.md
+│   ├── runu.md
+│   ├── servicou.md
+│   ├── sinais.md
+│   ├── spinner.md
+│   ├── systemu.md
+│   ├── textfilesu.md
+│   ├── utils.md
+│   └── validau.md
+├── examples
+│   ├── exemplo_alerta.sh
+│   ├── exemplo_conectividade.sh
+│   ├── exemplo_inputs.sh
+│   ├── exemplo_logu.sh
+│   ├── exemplo_menu_interativo.sh
+│   ├── exemplo_retryu.sh
+│   ├── exemplo_runu.sh
+│   └── exemplo_sinais.sh
+├── lib
+│   ├── alerta.sh
+│   ├── argsu.sh
+│   ├── backupu.sh
+│   ├── boolean.sh
+│   ├── conectividade.sh
+│   ├── configu.sh
+│   ├── cores.sh
+│   ├── crypto.sh
+│   ├── datau.sh
+│   ├── diru.sh
+│   ├── distu.sh
+│   ├── downu.sh
+│   ├── dryrun.sh
+│   ├── filesu.sh
+│   ├── inputs.sh
+│   ├── logu.sh
+│   ├── mockfiles.sh
+│   ├── pkgu.sh
+│   ├── procesu.sh
+│   ├── resourcesu.sh
+│   ├── retryu.sh
+│   ├── runu.sh
+│   ├── servicou.sh
+│   ├── sinais.sh
+│   ├── spinner.sh
+│   ├── systemu.sh
+│   ├── textfilesu.sh
+│   ├── utils.sh
+│   ├── validau.sh
+│   └── version.sh
+├── tests
+│   └── unit
+│       └── teste_flags_booleanas.sh
+├── CHANGELOG.md
+├── install.sh
+├── projeto_completo.txt
+├── README.md
+└── VERSION
+
+7 directories, 73 files
+
+================================================================
+ ARQUIVO: VERSION
+================================================================
+1.0.0
+================================================================
+ ARQUIVO: CHANGELOG.md
+================================================================
+# Changelog
+
+Todas as mudanças notáveis neste projeto serão documentadas aqui.
+
+O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/),
+e este projeto adota [Semantic Versioning](https://semver.org/lang/pt-BR/).
+
+---
+
+## [Não lançado]
+
+### Alterado
+- Módulos movidos de `/` para `lib/` — imports passam a usar `source "$BASHBASE/lib/módulo.sh"`
+- Diretório `exemplos/` renomeado para `examples/`
+- Diretório `testes/` renomeado para `tests/`, com subdiretório `tests/unit/`
+
+### Adicionado
+- `install.sh`: configura `BASHBASE` no perfil do shell automaticamente
+
+## [1.0.0] - 2026-03-29
+
+### Adicionado
+- Módulo `alerta.sh`: mensagens coloridas e categorizadas no terminal
+- Módulo `argsu.sh`: parsing declarativo de argumentos de linha de comando
+- Módulo `backupu.sh`: backup de arquivos e diretórios com timestamp
+- Módulo `boolean.sh`: padrões de booleanos para uso em scripts
+- Módulo `configu.sh`: leitura e escrita de arquivos `.env` / `CHAVE=valor`
+- Módulo `conectividade.sh`: verificação de rede, DNS, portas e serviços
+- Módulo `cores.sh`: colorização de texto com códigos ANSI
+- Módulo `crypto.sh`: hashes e chaves criptográficas via OpenSSL
+- Módulo `datau.sh`: timestamps, formatação de datas e cálculo de durações
+- Módulo `diru.sh`: inspeção e metadados de diretórios
+- Módulo `distu.sh`: detecção de distribuição Linux e informações do SO
+- Módulo `downu.sh`: download de arquivos via wget, curl ou TCP nativo
+- Módulo `dryrun.sh`: suporte a modo de simulação sem efeitos colaterais
+- Módulo `filesu.sh`: verificação, metadados e comparação de arquivos
+- Módulo `inputs.sh`: coleta interativa de dados do usuário
+- Módulo `logu.sh`: logging estruturado com níveis e rotação de arquivo
+- Módulo `mockfiles.sh`: criação de arquivos fictícios para testes
+- Módulo `pkgu.sh`: abstração para gerenciadores de pacotes (apt/dnf/pacman…)
+- Módulo `procesu.sh`: gerenciamento de processos e lock de execução exclusiva
+- Módulo `resourcesu.sh`: monitoramento de CPU, memória e disco
+- Módulo `retryu.sh`: retry automático com delay fixo ou backoff exponencial
+- Módulo `runu.sh`: execução de comandos com spinner e timeout
+- Módulo `servicou.sh`: gerenciamento de serviços systemd
+- Módulo `sinais.sh`: stack de cleanup garantido via traps de sinal
+- Módulo `spinner.sh`: animações de progresso no terminal
+- Módulo `systemu.sh`: utilitários gerais de sistema (root, PATH, exit codes)
+- Módulo `textfilesu.sh`: contagem, busca e substituição em arquivos de texto
+- Módulo `utils.sh`: manipulação de strings e extração de campos
+- Módulo `validau.sh`: validação de IP, e-mail, URL, porta e variáveis
+- Módulo `version.sh`: metadados e informações de versão da biblioteca
+
+================================================================
+ ARQUIVO: README.md
+================================================================
+# bashbase
+
+Biblioteca de funções Bash para automação de sistemas. Agrupa utilitários comuns em módulos independentes e reutilizáveis — saída colorida, logging, retry, spinners, inputs interativos, gerenciamento de processos, backups, conectividade e muito mais.
+
+## Pré-requisitos
+
+- **Bash 4.0 ou superior** (arrays associativos, `${var^^}`, `printf -v`)
+- Variável de ambiente `BASHBASE` apontando para o diretório do repositório
+
+## Instalação
+
+```bash
+git clone https://github.com/seu-usuario/bashbase.git ~/bashbase
+cd ~/bashbase && bash install.sh
+```
+
+O script `install.sh` detecta o shell atual e adiciona `BASHBASE` ao `~/.bashrc` ou `~/.zshrc` automaticamente. Para aplicar na sessão atual:
+
+```bash
+source ~/.bashrc   # ou ~/.zshrc
+```
+
+## Uso básico
+
+Carregue os módulos desejados com `source` no início do script:
+
+```bash
+#!/usr/bin/env bash
+source "$BASHBASE/lib/alerta.sh"
+source "$BASHBASE/lib/logu.sh"
+source "$BASHBASE/lib/retryu.sh"
+
+log_set_arquivo /var/log/meu_script.log
+
+info "Iniciando sincronização..."
+tentar 3 5 rsync -av origem/ destino/ || { erro "Sincronização falhou."; exit 1; }
+sucesso "Sincronização concluída."
+```
+
+## Exemplo completo
+
+```bash
+#!/usr/bin/env bash
+source "$BASHBASE/lib/alerta.sh"
+source "$BASHBASE/lib/argsu.sh"
+source "$BASHBASE/lib/sinais.sh"
+source "$BASHBASE/lib/procesu.sh"
+
+arg_definir "--host"  HOST  "localhost" "Endereço do servidor"
+arg_definir "--porta" PORTA 8080        "Porta de conexão"
+arg_parsear "$@" || exit 1
+
+lock_adquirir_com_cleanup /tmp/meu_script.lock || {
+    erro "Já existe uma instância em execução."
+    exit 1
+}
+
+info "Conectando em $HOST:$PORTA..."
+# ... lógica do script ...
+sucesso "Concluído."
+```
+
+## Índice de módulos
+
+| Módulo | Arquivo | Descrição |
+|--------|---------|-----------|
+| [alerta](docs/alerta.md) | `lib/alerta.sh` | Mensagens coloridas e categorizadas no terminal |
+| [argsu](docs/argsu.md) | `lib/argsu.sh` | Parsing declarativo de argumentos de linha de comando |
+| [backupu](docs/backupu.md) | `lib/backupu.sh` | Backup de arquivos e diretórios com timestamp |
+| [configu](docs/configu.md) | `lib/configu.sh` | Leitura e escrita de arquivos `.env` / `CHAVE=valor` |
+| [conectividade](docs/conectividade.md) | `lib/conectividade.sh` | Verificação de rede, DNS, portas e serviços |
+| [cores](docs/cores.md) | `lib/cores.sh` | Colorização de texto com códigos ANSI |
+| [crypto](docs/crypto.md) | `lib/crypto.sh` | Hashes e chaves criptográficas via OpenSSL |
+| [datau](docs/datau.md) | `lib/datau.sh` | Timestamps, formatação de datas e cálculo de durações |
+| [diru](docs/diru.md) | `lib/diru.sh` | Inspeção e metadados de diretórios |
+| [distu](docs/distu.md) | `lib/distu.sh` | Detecção de distribuição Linux e informações do SO |
+| [downu](docs/downu.md) | `lib/downu.sh` | Download de arquivos via wget, curl ou TCP nativo |
+| [filesu](docs/filesu.md) | `lib/filesu.sh` | Verificação, metadados e comparação de arquivos |
+| [inputs](docs/inputs.md) | `lib/inputs.sh` | Coleta interativa de dados do usuário |
+| [logu](docs/logu.md) | `lib/logu.sh` | Logging estruturado com níveis e rotação de arquivo |
+| [mockfiles](docs/mockfiles.md) | `lib/mockfiles.sh` | Criação de arquivos fictícios para testes |
+| [pkgu](docs/pkgu.md) | `lib/pkgu.sh` | Abstração para gerenciadores de pacotes (apt/dnf/pacman…) |
+| [procesu](docs/procesu.md) | `lib/procesu.sh` | Gerenciamento de processos e lock de execução exclusiva |
+| [resourcesu](docs/resourcesu.md) | `lib/resourcesu.sh` | Monitoramento de CPU, memória e disco |
+| [retryu](docs/retryu.md) | `lib/retryu.sh` | Retry automático com delay fixo ou backoff exponencial |
+| [runu](docs/runu.md) | `lib/runu.sh` | Execução de comandos com spinner e timeout |
+| [servicou](docs/servicou.md) | `lib/servicou.sh` | Gerenciamento de serviços systemd |
+| [sinais](docs/sinais.md) | `lib/sinais.sh` | Stack de cleanup garantido via traps de sinal |
+| [spinner](docs/spinner.md) | `lib/spinner.sh` | Animações de progresso no terminal |
+| [systemu](docs/systemu.md) | `lib/systemu.sh` | Utilitários gerais de sistema (root, PATH, exit codes) |
+| [textfilesu](docs/textfilesu.md) | `lib/textfilesu.sh` | Contagem, busca e substituição em arquivos de texto |
+| [utils](docs/utils.md) | `lib/utils.sh` | Manipulação de strings e extração de campos |
+| [validau](docs/validau.md) | `lib/validau.sh` | Validação de IP, e-mail, URL, porta e variáveis |
+| version | `lib/version.sh` | Metadados e informações de versão da biblioteca |
+
+## Dependências entre módulos
+
+```
+sinais.sh          ← (nenhuma)
+systemu.sh         ← (nenhuma)
+cores.sh           ← (nenhuma)
+logu.sh            ← (nenhuma)
+alerta.sh          ← cores.sh, logu.sh
+spinner.sh         ← sinais.sh
+retryu.sh          ← spinner.sh
+runu.sh            ← spinner.sh
+inputs.sh          ← validau.sh, sinais.sh
+procesu.sh         ← systemu.sh, sinais.sh
+servicou.sh        ← systemu.sh, alerta.sh
+conectividade.sh   ← systemu.sh, alerta.sh
+pkgu.sh            ← distu.sh
+crypto.sh          ← systemu.sh, alerta.sh
+textfilesu.sh      ← alerta.sh, backupu.sh
+```
+
+## Convenções
+
+- Funções de predicado (`e_*`, `arquivo_*`) retornam **0 para verdadeiro** e **1 para falso**, permitindo uso direto em condicionais.
+- Funções de contagem imprimem o resultado no **stdout como inteiro puro**, sem unidade.
+- Funções que modificam arquivos realizam a operação **in-place** a menos que indicado o contrário.
+- Todas as funções retornam **1** se o arquivo ou diretório informado não existir.
+- Guard variables (`_MODULO_SH_LOADED`) protegem contra importações circulares e duplas.
+
+## Convenções de Booleanos
+
+Este projeto possui três padrões de booleanos. Entenda qual usar:
+
+### Padrão 1: Flags de CLI (argsu.sh)
+- **Verdadeiro:** `"1"` (string)  
+- **Falso:** `""` (vazio)
+- **Verificação:** `[ "$VAR" = "1" ]`
+- **Uso:** Argumentos de linha de comando (`--verbose`)
+
+### Padrão 2: Nivelação (logu.sh)
+- **Valores:** Números inteiros (0, 1, 2, 3)
+- **Verificação:** `[ $VAR -lt $OUTRO ]` (comparação numérica)
+- **Uso:** Níveis de log (DEBUG=0, INFO=1, etc.)
+
+### Padrão 3: Predicados (filesu.sh, validau.sh)
+- **Verdadeiro:** `return 0`
+- **Falso:** `return 1`  
+- **Verificação:** `if predicate; then ... fi`
+- **Uso:** Validações e testes
+
+### NÃO recomendado
+- ❌ Não use `"true"` / `"false"`  
+- ❌ Não misture padrões em uma função
+- ❌ Não compare string com `-lt` / `-gt`
+================================================================
+ ARQUIVO: install.sh
+================================================================
+#!/usr/bin/env bash
+# install.sh - Configura a variável BASHBASE no perfil do shell do usuário
+#
+# Define BASHBASE apontando para o diretório raiz do repositório e
+# adiciona a exportação ao ~/.bashrc ou ~/.zshrc, conforme o shell ativo.
+# Idempotente: não duplica a linha se já estiver presente.
+
+set -euo pipefail
+
+REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+EXPORT_LINE="export BASHBASE=\"${REPO_DIR}\""
+
+# Detecta o arquivo de perfil do shell atual
+if [[ "${SHELL:-}" == */zsh ]]; then
+    PROFILE="$HOME/.zshrc"
+elif [[ "${SHELL:-}" == */bash ]]; then
+    PROFILE="$HOME/.bashrc"
+else
+    echo "Shell não reconhecido: ${SHELL:-desconhecido}"
+    echo "Adicione manualmente ao seu perfil:"
+    echo "  ${EXPORT_LINE}"
+    exit 1
+fi
+
+# Adiciona apenas se ainda não estiver presente
+if grep -qF "BASHBASE=" "$PROFILE" 2>/dev/null; then
+    echo "BASHBASE já está configurado em ${PROFILE}."
+else
+    printf '\n# bashbase\n%s\n' "$EXPORT_LINE" >> "$PROFILE"
+    echo "BASHBASE configurado em ${PROFILE}."
+fi
+
+echo "  BASHBASE=${REPO_DIR}"
+echo
+echo "Para aplicar na sessão atual:"
+echo "  source ${PROFILE}"
+
+================================================================
+ ARQUIVO: lib/alerta.sh
+================================================================
+# shellcheck shell=bash
+# alerta.sh - Funções para exibição de mensagens formatadas e coloridas no terminal
+#
+# Fornece funções de alerta categorizadas por tipo (aviso, erro, sucesso, informação),
+# com suporte a recuo (indentação) para hierarquia visual em saídas de scripts.
+#
+# Integração com logu.sh: se log_set_arquivo for chamado, todas as funções
+# de alerta gravam automaticamente no arquivo de log (sem cores, com timestamp).
+# O nível de log respeitado é o definido por log_set_nivel.
+#   alerta  → WARN
+#   erro    → ERRO
+#   sucesso → INFO
+#   info    → INFO
+#
+# Dependências: cores.sh, logu.sh
+#
+# Funções disponíveis:
+#   alerta  <mensagem> [recuo] - Exibe mensagem de aviso em amarelo
+#   erro    <mensagem> [recuo] - Exibe mensagem de erro em vermelho (stderr)
+#   sucesso <mensagem> [recuo] - Exibe mensagem de sucesso em verde
+#   info    <mensagem> [recuo] - Exibe mensagem informativa em azul
+#   debug   <mensagem> [recuo] - Exibe mensagem de diagnóstico (apenas se DEBUG=1)
+#
+# O parâmetro opcional [recuo] define o número de tabulações (\t) inseridas
+# antes da mensagem, permitindo criar saídas hierárquicas visualmente organizadas.
+# Exemplo com recuo 2: "		mensagem" (dois \t antes do texto)
+
+
+[[ -n "${_ALERTA_SH_LOADED:-}" ]] && return 0
+readonly _ALERTA_SH_LOADED=1
+
+source "$(dirname "${BASH_SOURCE[0]}")/cores.sh"
+source "$(dirname "${BASH_SOURCE[0]}")/logu.sh"
+
+function msg_alerta() {
+    # Exibe uma mensagem de aviso em amarelo.
+    # Se log_set_arquivo estiver configurado, grava também no log como WARN.
+    # Modo de uso: msg_alerta "Arquivo de configuração não encontrado"
+    #              msg_alerta "Item ignorado" 2   (com 2 tabulações de recuo)
+    local recuo
+    if [ -n "$2" ]; then
+        local recuo
+        recuo=$(printf '\t%.0s' $(seq 1 "$2"))
+    else
+        local recuo=""
+    fi
+    if [ -n "$1" ]; then
+        cor_amarelo "${recuo}$1"
+        [ -n "$_LOG_ARQUIVO" ] && log_escrever_apenas_arquivo "$_LOG_WARN" "WARN " "$1"
+    fi
+}
+
+function msg_erro() {
+    # Exibe uma mensagem de erro em vermelho.
+    # Se log_set_arquivo estiver configurado, grava também no log como ERRO.
+    # Modo de uso: msg_erro "Falha ao conectar ao servidor"
+    #              msg_erro "Permissão negada" 1   (com 1 tabulação de recuo)
+    local recuo
+    if [ -n "$2" ]; then
+        local recuo
+        recuo=$(printf '\t%.0s' $(seq 1 "$2"))
+    else
+        local recuo=""
+    fi
+    if [ -n "$1" ]; then
+        cor_vermelho "${recuo}$1" >&2
+        [ -n "$_LOG_ARQUIVO" ] && log_escrever_apenas_arquivo "$_LOG_ERRO" "ERRO " "$1"
+    fi
+}
+
+function msg_sucesso() {
+    # Exibe uma mensagem de sucesso em verde.
+    # Se log_set_arquivo estiver configurado, grava também no log como INFO.
+    # Modo de uso: msg_sucesso "Instalação concluída com sucesso"
+    #              msg_sucesso "Arquivo copiado" 1   (com 1 tabulação de recuo)
+    local recuo
+    if [ -n "$2" ]; then
+        local recuo
+        recuo=$(printf '\t%.0s' $(seq 1 "$2"))
+    else
+        local recuo=""
+    fi
+    if [ -n "$1" ]; then
+        cor_verde "${recuo}$1"
+        [ -n "$_LOG_ARQUIVO" ] && log_escrever_apenas_arquivo "$_LOG_INFO" "INFO " "$1"
+    fi
+}
+
+function msg_info() {
+    # Exibe uma mensagem informativa em azul.
+    # Se log_set_arquivo estiver configurado, grava também no log como INFO.
+    # Modo de uso: msg_info "Iniciando sincronização dos arquivos..."
+    #              msg_info "Processando item 3 de 10" 1   (com 1 tabulação de recuo)
+    local recuo
+    if [ -n "$2" ]; then
+        local recuo
+        recuo=$(printf '\t%.0s' $(seq 1 "$2"))
+    else
+        local recuo=""
+    fi
+    if [ -n "$1" ]; then
+        cor_azul "${recuo}$1"
+        [ -n "$_LOG_ARQUIVO" ] && log_escrever_apenas_arquivo "$_LOG_INFO" "INFO " "$1"
+    fi
+}
+
+function msg_debug() {
+    # Exibe uma mensagem de diagnóstico em cinza escuro, prefixada com [DEBUG].
+    # Só produz saída quando a variável de ambiente DEBUG estiver definida como "1".
+    # Modo de uso: DEBUG=1 ./meu_script.sh
+    # Se log_set_arquivo estiver configurado, grava no log como DEBUG independente
+    # do valor de DEBUG (o nível mínimo de log controla a gravação em arquivo).
+    # Modo de uso: msg_debug "variável x = $x"
+    #              msg_debug "entrando na função foo" 1   (com 1 tabulação de recuo)
+    local recuo
+    if [ -n "$2" ]; then
+        local recuo
+        recuo=$(printf '\t%.0s' $(seq 1 "$2"))
+    else
+        local recuo=""
+    fi
+    if [ -n "$1" ]; then
+        [ "${DEBUG:-0}" = "1" ] && echo -e "\033[90m${recuo}[DEBUG] $1\033[0m"
+        [ -n "$_LOG_ARQUIVO" ] && log_escrever_apenas_arquivo "$_LOG_DEBUG" "DEBUG" "$1"
+    fi
+}
+
+================================================================
+ ARQUIVO: lib/argsu.sh
+================================================================
+# shellcheck shell=bash
+# argsu.sh - Parsing declarativo de argumentos de linha de comando
+#
+# Permite declarar os argumentos aceitos por um script e parsear "$@" de forma
+# automática, com suporte a --flag valor, --flag=valor, flags booleanas,
+# argumentos posicionais e geração automática de --help.
+#
+# Dependências: nenhuma
+#
+# Funções disponíveis:
+#   arg_definir  <--flag> <VAR> [padrao] [descricao] [tipo] - Declara um argumento aceito
+#   arg_parsear  "$@"                                       - Parseia os argumentos do script
+#   arg_ajuda                                               - Imprime a mensagem de ajuda
+#   arg_resetar                                             - Limpa todas as definições
+#
+# Variável global preenchida por arg_parsear:
+#   _ARG_POSICIONAIS   Array com os argumentos posicionais capturados
+#
+# Modo de uso típico:
+#   source $BASHBASE/argsu.sh
+#
+#   arg_definir "--host"    HOST    "localhost" "Endereço do servidor"
+#   arg_definir "--porta"   PORTA   8080        "Porta de conexão"
+#   arg_definir "--verbose" VERBOSE ""          "Ativar saída detalhada" "boolean"
+#   arg_definir "--saida"   SAIDA   ""          "Arquivo de saída"       "valor"
+#   arg_parsear "$@" || exit 1
+#
+#   echo "Conectando em $HOST:$PORTA"
+#   [ "$VERBOSE" = "1" ] && echo "Modo verboso ativado"
+#   echo "Arquivos: ${_ARG_POSICIONAIS[*]}"
+#
+# Tipos de argumento (5º parâmetro de arg_definir):
+#   "boolean"   Flag sem valor: recebe "1" quando presente, "" quando ausente.
+#               Inferido automaticamente quando o valor padrão for vazio.
+#   "valor"     Flag que exige um valor explícito na linha de comando; erro se ausente.
+#               Inferido automaticamente quando o valor padrão for não vazio.
+#               Passar explicitamente quando a flag não tem padrão mas exige valor.
+#
+# Argumentos posicionais (não iniciados com -):
+#   Capturados automaticamente no array global _ARG_POSICIONAIS.
+#   O marcador "--" força que todos os argumentos seguintes sejam posicionais,
+#   mesmo que comecem com "-".
+#
+# Sintaxe de valor suportada:
+#   --flag valor      (separado por espaço)
+#   --flag=valor      (separado por sinal de igual)
+
+
+[[ -n "${_ARGSU_SH_LOADED:-}" ]] && return 0
+readonly _ARGSU_SH_LOADED=1
+
+# Registros paralelos de definições de argumentos
+_ARG_FLAGS=()
+_ARG_VARS=()
+_ARG_PADROES=()
+_ARG_DESCS=()
+_ARG_TIPOS=()
+
+# Argumentos posicionais capturados por arg_parsear
+_ARG_POSICIONAIS=()
+
+function arg_definir() {
+    # Declara um argumento aceito pelo script com sua variável de destino,
+    # valor padrão, descrição e tipo.
+    #
+    # Parâmetros:
+    #   $1 - flag da linha de comando (ex: --host)
+    #   $2 - nome da variável de destino (ex: HOST)
+    #   $3 - valor padrão; "" ou omitido indica ausência de padrão
+    #   $4 - descrição exibida no --help
+    #   $5 - tipo: "boolean" ou "valor" (opcional; inferido se omitido)
+    #
+    # Inferência automática do tipo quando $5 for omitido:
+    #   padrão vazio     → boolean: recebe "1" quando presente, "" quando ausente
+    #   padrão não vazio → valor:   exige um valor explícito; erro se ausente
+    # Passar $5 explicitamente quando a inferência não for suficiente
+    # (ex: flag do tipo "valor" sem padrão definido).
+    #
+    # Modo de uso:
+    #   arg_definir "--host"    HOST    "localhost" "Endereço do servidor"
+    #   arg_definir "--verbose" VERBOSE ""          "Modo verboso"     "boolean"
+    #   arg_definir "--saida"   SAIDA   ""          "Arquivo de saída" "valor"
+    local flag="$1" var="$2" padrao="${3:-}" desc="${4:-}" tipo="${5:-}"
+
+    if [[ -z "$tipo" ]]; then
+        [[ -z "$padrao" ]] && tipo="boolean" || tipo="valor"
+    fi
+
+    _ARG_FLAGS+=("$flag")
+    _ARG_VARS+=("$var")
+    _ARG_PADROES+=("$padrao")
+    _ARG_DESCS+=("$desc")
+    _ARG_TIPOS+=("$tipo")
+
+    [ -n "$padrao" ] && printf -v "$var" '%s' "$padrao"
+}
+
+function arg_parsear() {
+    # Parseia os argumentos do script ($@) e preenche as variáveis declaradas
+    # com arg_definir. Retorna 1 em caso de:
+    #   - argumento desconhecido
+    #   - flag do tipo "valor" fornecida sem valor
+    #   - --help ou -h passado (exibe ajuda antes de retornar)
+    # Argumentos posicionais (não iniciados com "-") são acumulados em _ARG_POSICIONAIS.
+    # O marcador "--" força todos os tokens seguintes como posicionais,
+    # mesmo que comecem com "-".
+    # Modo de uso: arg_parsear "$@" || exit 1
+    _ARG_POSICIONAIS=()
+    local separador=0
+
+    while [[ $# -gt 0 ]]; do
+        local chave="$1"
+
+        # Após "--", tudo vai para posicionais independente do formato
+        if [[ "$separador" -eq 1 ]]; then
+            _ARG_POSICIONAIS+=("$chave")
+            shift
+            continue
+        fi
+
+        if [[ "$chave" == "--" ]]; then
+            separador=1
+            shift
+            continue
+        fi
+
+        if [[ "$chave" == "--help" || "$chave" == "-h" ]]; then
+            arg_ajuda
+            return 1
+        fi
+
+        # Argumento posicional (não começa com -)
+        if [[ "$chave" != -* ]]; then
+            _ARG_POSICIONAIS+=("$chave")
+            shift
+            continue
+        fi
+
+        local encontrado=0 i
+        for i in "${!_ARG_FLAGS[@]}"; do
+            local flag="${_ARG_FLAGS[$i]}" var="${_ARG_VARS[$i]}" tipo="${_ARG_TIPOS[$i]}"
+
+            if [[ "$chave" == "$flag" ]]; then
+                encontrado=1
+                if [[ "$tipo" == "boolean" ]]; then
+                    printf -v "$var" '%s' "1"
+                elif [[ $# -ge 2 && "${2:-}" != -* ]]; then
+                    printf -v "$var" '%s' "$2"
+                    shift
+                else
+                    echo "Flag '$flag' requer um valor" >&2
+                    arg_ajuda >&2
+                    return 1
+                fi
+                break
+            elif [[ "$chave" == "$flag="* ]]; then
+                encontrado=1
+                printf -v "$var" '%s' "${chave#*=}"
+                break
+            fi
+        done
+
+        if [[ "$encontrado" -eq 0 ]]; then
+            echo "Argumento desconhecido: $chave" >&2
+            arg_ajuda >&2
+            return 1
+        fi
+
+        shift
+    done
+}
+
+function arg_ajuda() {
+    # Exibe a lista de argumentos declarados com suas descrições e valores padrão.
+    # Chamada automaticamente por arg_parsear ao receber --help/-h ou argumento inválido.
+    # Modo de uso: arg_ajuda
+    echo "Opções disponíveis:"
+    local i
+    for i in "${!_ARG_FLAGS[@]}"; do
+        local flag="${_ARG_FLAGS[$i]}"
+        local desc="${_ARG_DESCS[$i]}"
+        local padrao="${_ARG_PADROES[$i]}"
+        local tipo="${_ARG_TIPOS[$i]}"
+        if [[ "$tipo" == "boolean" ]]; then
+            printf "  %-22s %s\n" "$flag" "$desc"
+        elif [ -n "$padrao" ]; then
+            printf "  %-22s %s (padrão: %s)\n" "$flag" "$desc" "$padrao"
+        else
+            printf "  %-22s %s\n" "$flag" "$desc"
+        fi
+    done
+    printf "  %-22s %s\n" "--help, -h" "Exibe esta mensagem de ajuda"
+}
+
+function arg_resetar() {
+    # Remove todas as definições de argumento registradas e limpa _ARG_POSICIONAIS.
+    # Útil quando argsu.sh é reutilizado em múltiplos contextos num mesmo processo.
+    # Modo de uso: arg_resetar
+    _ARG_FLAGS=()
+    _ARG_VARS=()
+    _ARG_PADROES=()
+    _ARG_DESCS=()
+    _ARG_TIPOS=()
+    _ARG_POSICIONAIS=()
+}
+
+================================================================
+ ARQUIVO: lib/backupu.sh
+================================================================
+# shellcheck shell=bash
+# backupu.sh - Funções para backup de arquivos e diretórios
+#
+# Fornece utilitários para criar cópias de segurança com timestamps automáticos
+# e limpeza periódica de backups antigos.
+#
+# Quando DRYRUN="1", nenhuma operação de disco é executada: as funções imprimem
+# no stderr o que seria feito e retornam 0.
+#
+# Dependências: nenhuma
+#
+# Funções disponíveis:
+#   backup_arquivo         <arquivo> [destino]  - Copia arquivo com timestamp no nome
+#   backup_diretorio       <dir>    [destino]   - Compacta diretório em .tar.gz com timestamp
+#   limpar_backups_antigos <dir>    [dias]      - Remove backups com mais de N dias
+
+
+[[ -n "${_BACKUPU_SH_LOADED:-}" ]] && return 0
+readonly _BACKUPU_SH_LOADED=1
+
+function backup_arquivo() {
+    # Cria uma cópia de segurança de um arquivo adicionando timestamp ao nome.
+    # O arquivo de backup é criado no mesmo diretório do original por padrão,
+    # ou no diretório de destino informado como segundo parâmetro.
+    # Em caso de sucesso, imprime o caminho do arquivo de backup criado.
+    # Em dry-run: imprime o caminho que seria criado sem copiar nada.
+    # Modo de uso: backup_arquivo /etc/nginx/nginx.conf
+    #              backup_arquivo /etc/nginx/nginx.conf /var/backups
+    local arquivo
+    arquivo="$1"
+    local destino="${2:-$(dirname "$arquivo")}"
+
+    if [ ! -f "$arquivo" ]; then
+        echo "Arquivo não encontrado: $arquivo" >&2
+        return 1
+    fi
+
+    if [ ! -d "$destino" ]; then
+        echo "Diretório de destino não encontrado: $destino" >&2
+        return 1
+    fi
+
+    local nome_base
+    nome_base=$(basename "$arquivo")
+    local timestamp
+    timestamp=$(date '+%Y%m%d_%H%M%S')
+    local destino_final="${destino}/${nome_base}.${timestamp}.bak"
+
+    if [ "${DRYRUN:-}" = "1" ]; then
+        echo "[DRY-RUN] backup_arquivo: cp '$arquivo' '$destino_final'" >&2
+        echo "$destino_final"
+        return 0
+    fi
+
+    cp "$arquivo" "$destino_final" && echo "$destino_final"
+}
+
+function backup_diretorio() {
+    # Compacta um diretório inteiro em um arquivo .tar.gz com timestamp no nome.
+    # O arquivo resultante é criado no diretório de destino informado,
+    # ou no diretório atual se nenhum destino for fornecido.
+    # Em caso de sucesso, imprime o caminho do arquivo .tar.gz criado.
+    # Em dry-run: imprime o caminho que seria criado sem compactar nada.
+    # Modo de uso: backup_diretorio /var/www/html
+    #              backup_diretorio /var/www/html /var/backups
+    local diretorio
+    diretorio="$1"
+    local destino="${2:-.}"
+
+    if [ ! -d "$diretorio" ]; then
+        echo "Diretório não encontrado: $diretorio" >&2
+        return 1
+    fi
+
+    local nome_base
+    nome_base=$(basename "$diretorio")
+    local timestamp
+    timestamp=$(date '+%Y%m%d_%H%M%S')
+    local arquivo_saida="${destino}/${nome_base}_${timestamp}.tar.gz"
+
+    if [ "${DRYRUN:-}" = "1" ]; then
+        echo "[DRY-RUN] backup_diretorio: tar -czf '$arquivo_saida' '$diretorio'" >&2
+        echo "$arquivo_saida"
+        return 0
+    fi
+
+    tar -czf "$arquivo_saida" -C "$(dirname "$diretorio")" "$nome_base" && echo "$arquivo_saida"
+}
+
+function limpar_backups_antigos() {
+    # Remove arquivos de backup (.bak e .tar.gz) com mais de N dias em um diretório.
+    # A busca é feita apenas no nível raiz do diretório (sem recursão).
+    # O valor padrão de dias é 30 caso não seja informado.
+    # Em dry-run: lista os arquivos que seriam removidos sem deletar nada.
+    # Modo de uso: limpar_backups_antigos /var/backups 15
+    local diretorio
+    diretorio="$1"
+    local dias="${2:-30}"
+
+    if [ ! -d "$diretorio" ]; then
+        echo "Diretório não encontrado: $diretorio" >&2
+        return 1
+    fi
+
+    if [ "${DRYRUN:-}" = "1" ]; then
+        find "$diretorio" -maxdepth 1 \( -name "*.bak" -o -name "*.tar.gz" \) -mtime +"$dias" \
+            -exec echo "[DRY-RUN] limpar_backups_antigos: remover {}" \; >&2
+        return 0
+    fi
+
+    find "$diretorio" -maxdepth 1 \( -name "*.bak" -o -name "*.tar.gz" \) -mtime +"$dias" -exec rm -f {} \;
+}
+
+================================================================
+ ARQUIVO: lib/boolean.sh
+================================================================
+# shellcheck shell=bash
+# boolean.sh - Funções utilitárias para interpretação de valores booleanos
+#
+# Centraliza a lógica de verificação de verdadeiro/falso, aceitando múltiplos
+# formatos de entrada. Útil para interpretar variáveis de ambiente vindas de
+# arquivos de configuração ou outras fontes externas que possam usar formatos
+# diferentes do padrão adotado internamente ("1"/"").
+#
+# Padrão adotado nesta biblioteca:
+#   "1"  → verdadeiro   (argsu.sh, inputs.sh, alerta.sh)
+#   ""   → falso
+#   0-3  → numérico     (logu.sh — exclusivo para níveis de log)
+#
+# Dependências: nenhuma
+#
+# Funções disponíveis:
+#   eh_verdadeiro  <valor>  - Retorna 0 se o valor for considerado verdadeiro
+#   eh_falso       <valor>  - Retorna 0 se o valor for considerado falso
+
+
+[[ -n "${_BOOLEAN_SH_LOADED:-}" ]] && return 0
+readonly _BOOLEAN_SH_LOADED=1
+
+function eh_verdadeiro() {
+    # Retorna 0 se o valor for reconhecido como afirmativo, 1 se negativo,
+    # ou 2 se o valor não for reconhecido.
+    # Aceita: 1, true, yes, sim, on  (e variantes entre aspas)
+    # Rejeita: 0, false, no, não, off, "" (vazio)
+    # Modo de uso: eh_verdadeiro "$DEBUG" && echo "Debug ativado"
+    local valor="${1:-}"
+    case "$valor" in
+        1|"1"|true|"true"|yes|"yes"|sim|"sim"|on|"on") return 0 ;;
+        0|"0"|false|"false"|no|"no"|não|"não"|off|"off"|"") return 1 ;;
+        *) return 2 ;;
+    esac
+}
+
+function eh_falso() {
+    # Retorna 0 se o valor for reconhecido como negativo, 1 se afirmativo,
+    # ou 2 se o valor não for reconhecido.
+    # Inverso exato de eh_verdadeiro.
+    # Modo de uso: eh_falso "$VERBOSE" && echo "Modo silencioso"
+    local valor="${1:-}"
+    case "$valor" in
+        0|"0"|false|"false"|no|"no"|não|"não"|off|"off"|"") return 0 ;;
+        1|"1"|true|"true"|yes|"yes"|sim|"sim"|on|"on") return 1 ;;
+        *) return 2 ;;
+    esac
+}
+
+================================================================
+ ARQUIVO: lib/conectividade.sh
+================================================================
+# shellcheck shell=bash
+# conectividade.sh - Funções para verificação de conectividade de rede e disponibilidade de serviços
+#
+# Fornece diagnósticos de rede para internet, DNS, interfaces Wi-Fi e Ethernet,
+# além de verificações de porta para os serviços mais comuns (SSH, HTTP, FTP, etc.).
+# As funções de verificação de serviço aceitam um host opcional; se omitido,
+# verificam o próprio localhost.
+#
+# Dependências: systemu.sh, alerta.sh
+#
+# Funções disponíveis:
+#   con_checar_internet      - Verifica conectividade com a internet
+#   con_checar_dns           - Verifica resolução de nomes DNS
+#   con_checar_porta          <host> <porta> [timeout]  - Verifica se uma porta está aberta
+#   con_checar_interface     <interface>     - Verifica se uma interface de rede existe
+#   con_checar_gateway       - Verifica se há gateway padrão configurado
+#   con_checar_wifi          - Verifica se há conexão Wi-Fi ativa
+#   con_checar_ethernet      - Verifica se há conexão Ethernet ativa
+#   con_lista_enderecos_ip   - Lista os endereços IP de todas as interfaces
+#   con_ssh_disponivel    [host]  - Verifica disponibilidade do SSH (porta 22)
+#   con_http_disponivel   [host]  - Verifica disponibilidade do HTTP (porta 80)
+#   con_https_disponivel  [host]  - Verifica disponibilidade do HTTPS (porta 443)
+#   con_dns_disponivel    [host]  - Verifica disponibilidade do DNS (porta 53)
+#   con_smtp_disponivel   [host]  - Verifica disponibilidade do SMTP (porta 25)
+#   con_pop3_disponivel   [host]  - Verifica disponibilidade do POP3 (porta 110)
+#   con_imap_disponivel   [host]  - Verifica disponibilidade do IMAP (porta 143)
+#   con_ftp_disponivel    [host]  - Verifica disponibilidade do FTP (porta 21)
+#   con_smb_disponivel    [host]  - Verifica disponibilidade do SMB (porta 445)
+#   con_rdp_disponivel    [host]  - Verifica disponibilidade do RDP (porta 3389)
+#   con_vpn_disponivel    [host]  - Verifica disponibilidade do VPN/OpenVPN (porta 1194)
+
+
+[[ -n "${_CONECTIVIDADE_SH_LOADED:-}" ]] && return 0
+readonly _CONECTIVIDADE_SH_LOADED=1
+
+source "$(dirname "${BASH_SOURCE[0]}")/systemu.sh"
+source "$(dirname "${BASH_SOURCE[0]}")/alerta.sh"
+
+function con_checar_internet() {
+    # Tenta google.com, se falhar tenta o IP do DNS do Google
+    if ping -c 1 google.com &> /dev/null || ping -c 1 8.8.8.8 &> /dev/null; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+function con_checar_dns() {
+    # Tenta resolver google.com usando host, dig ou nslookup (nesta ordem).
+    # Retorna 0 se qualquer ferramenta confirmar a resolução, 1 se todas falharem.
+    if sys_programa_esta_instalado "host"; then
+        host google.com &>/dev/null && return 0
+    elif sys_programa_esta_instalado "dig"; then
+        dig +short google.com &>/dev/null && return 0
+    elif sys_programa_esta_instalado "nslookup"; then
+        nslookup google.com &>/dev/null && return 0
+    else
+        erro "Nenhuma ferramenta de consulta DNS encontrada ('host', 'dig' ou 'nslookup')."
+        return 1
+    fi
+    return 1
+}
+
+function con_checar_porta() {
+    # Verifica se uma porta TCP está aberta em um host.
+    # Usa /dev/tcp (built-in do bash) como método primário; cai para nc se falhar.
+    # Modo de uso: con_checar_porta <host> <porta> [timeout_segundos]
+    local host="$1"
+    local porta="$2"
+    local timeout="${3:-3}"
+
+    # Método primário: /dev/tcp é um built-in do bash, sem dependências externas
+    if (timeout "$timeout" bash -c "echo > /dev/tcp/$host/$porta") &>/dev/null; then
+        return 0
+    fi
+
+    # Fallback: nc (netcat), se disponível
+    if sys_programa_esta_instalado "nc"; then
+        nc -z -w "$timeout" "$host" "$porta" &>/dev/null && return 0
+    fi
+
+    return 1
+}
+
+function con_checar_interface() {
+    # Modo de Uso: con_checar_interface <interface>
+    if ip link show "$1" &> /dev/null; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+function con_checar_gateway() {
+    # 
+    if ip route | grep -q "default"; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+function con_checar_wifi() {
+    # Verifica se o sistema está conectado a uma rede Wi-Fi
+
+    # 1. Tenta usar o nmcli (mais comum no Fedora/Ubuntu moderno)
+    if sys_programa_esta_instalado "nmcli"; then
+        # O grep busca 'conectado' ou 'connected' para ser universal
+        if nmcli -t -f TYPE,STATE device | grep -qE "^wifi:(conectado|connected)"; then
+            return 0
+        fi
+        # Se o nmcli existe mas não achou wifi conectado, 
+        # ainda podemos tentar o iwconfig como fallback antes de desistir
+    fi
+
+    # 2. Tenta usar o iwconfig (método tradicional)
+    if sys_programa_esta_instalado "iwconfig"; then
+        if iwconfig 2>&1 | grep -q "ESSID"; then
+            return 0
+        fi
+    else
+        # Se chegamos aqui, o nmcli falhou/não existia E o iwconfig não está instalado
+        if ! sys_programa_esta_instalado "nmcli"; then
+            erro "Nenhum dos comandos ('nmcli' ou 'iwconfig') foi encontrado para verificar o Wi-Fi."
+            return 1
+        fi
+    fi
+
+    # Se passou pelos testes e não encontrou conexão ativa
+    return 1
+}
+
+function con_checar_ethernet() {
+    # Verifica se o sistema está conectado a uma rede Ethernet.
+    # Usa nmcli como método primário; cai para ethtool como fallback.
+    # No fallback, itera sobre cada interface en*/eth* individualmente,
+    # removendo sufixos @ifN (presentes em containers) antes de consultar ethtool.
+
+    # Método primário: nmcli
+    if sys_programa_esta_instalado "nmcli"; then
+        if nmcli -t -f TYPE,STATE device | grep -qE "^ethernet:(conectado|connected)"; then
+            return 0
+        fi
+    fi
+
+    # Fallback: ethtool
+    if ! sys_programa_esta_instalado "ethtool"; then
+        if ! sys_programa_esta_instalado "nmcli"; then
+            erro "Nenhum dos comandos ('nmcli' ou 'ethtool') foi encontrado para verificar a Ethernet."
+        fi
+        return 1
+    fi
+
+    local interfaces
+    mapfile -t interfaces < <(ip -o link show | awk -F': ' '{print $2}' | cut -d@ -f1 | grep -E '^(en|eth)')
+
+    if [ "${#interfaces[@]}" -eq 0 ]; then
+        return 1
+    fi
+
+    local iface
+    for iface in "${interfaces[@]}"; do
+        if ethtool "$iface" 2>/dev/null | grep -q "Link detected: yes"; then
+            return 0
+        fi
+    done
+
+    return 1
+}
+
+function con_lista_enderecos_ip() {
+    # Lista os endereços IP das interfaces de rede do sistema
+    ip -o -4 addr show | awk '{print $2 ": " $4}'
+}
+
+
+function con_ssh_disponivel() {
+    # Verifica se o serviço SSH está disponível na máquina local.
+    # Pode receber como parâmetro um host diferente de localhost, por exemplo: con_ssh_disponivel "
+    if [ -n "$1" ]; then
+        local host="$1"
+    else
+        local host="localhost"
+    fi
+    if con_checar_porta "$host" 22; then
+        return 0
+    else
+        return 1
+    fi    
+    
+}
+
+function con_http_disponivel() {
+    # Verifica se o serviço HTTP (porta 80) está disponível na máquina local
+    if [ -n "$1" ]; then
+        local host="$1"
+    else
+        local host="localhost"
+    fi
+        
+    if con_checar_porta "$host" 80; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+function con_https_disponivel() {
+    # Verifica se o serviço HTTPS (porta 443) está disponível na máquina local
+    if [ -n "$1" ]; then
+        local host="$1"
+    else
+        local host="localhost"
+    fi
+
+    if con_checar_porta "$host" 443; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+function con_dns_disponivel() {
+    # Verifica se o serviço DNS (porta 53) está disponível na máquina local
+    if [ -n "$1" ]; then
+        local host="$1"
+    else
+        local host="localhost"
+    fi
+
+    if con_checar_porta "$host" 53; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+function con_smtp_disponivel() {
+    # Verifica se o serviço SMTP (porta 25) está disponível na máquina local
+    if [ -n "$1" ]; then
+        local host="$1"
+    else
+        local host="localhost"
+    fi
+
+    if con_checar_porta "$host" 25; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+function con_pop3_disponivel() {
+    # Verifica se o serviço POP3 (porta 110) está disponível na máquina local
+    if [ -n "$1" ]; then
+        local host="$1"
+    else
+        local host="localhost"
+    fi
+    
+    if con_checar_porta "$host" 110; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+function con_imap_disponivel() {
+    # Verifica se o serviço IMAP (porta 143) está disponível na máquina local
+    if [ -n "$1" ]; then
+        local host="$1"
+    else
+        local host="localhost"
+    fi
+
+    if con_checar_porta "$host" 143; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+function con_ftp_disponivel() {
+    # Verifica se o serviço FTP (porta 21) está disponível na máquina local
+    if [ -n "$1" ]; then
+        local host="$1"
+    else
+        local host="localhost"
+    fi    
+
+    if con_checar_porta "$host" 21; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+function con_smb_disponivel() {
+    # Verifica se o serviço SMB (porta 445) está disponível na máquina local
+    if [ -n "$1" ]; then
+        local host="$1"
+    else
+        local host="localhost"
+    fi
+
+    if con_checar_porta "$host" 445; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+function con_rdp_disponivel() {
+    # Verifica se o serviço RDP (porta 3389) está disponível na máquina local
+    if [ -n "$1" ]; then
+        local host="$1"
+    else
+        local host="localhost"
+    fi  
+    if con_checar_porta "$host" 3389; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+function con_vpn_disponivel() {
+    # Verifica se o serviço VPN (porta 1194) está disponível na máquina local
+    if [ -n "$1" ]; then
+        local host="$1"
+    else
+        local host="localhost"
+    fi
+
+    if con_checar_porta "$host" 1194; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+
+================================================================
+ ARQUIVO: lib/configu.sh
+================================================================
+# shellcheck shell=bash
+# configu.sh - Funções para leitura e escrita de arquivos de configuração
+#
+# Trabalha com arquivos no formato CHAVE=valor, compatível com o padrão .env.
+# Suporta valores com ou sem aspas e ignora comentários e linhas em branco.
+#
+# Quando DRYRUN="1", config_escrever, config_remover e config_carregar simulam
+# suas operações sem modificar ou exportar nada.
+#
+# Dependências: dryrun.sh
+#
+# Funções disponíveis:
+#   config_ler       <arquivo> <chave>         - Lê o valor de uma chave
+#   config_existe    <arquivo> <chave>         - Verifica se uma chave existe
+#   config_escrever  <arquivo> <chave> <valor> - Cria ou atualiza uma chave
+#   config_remover   <arquivo> <chave>         - Remove uma chave do arquivo
+#   config_carregar  <arquivo>                 - Exporta todas as chaves como variáveis de ambiente
+
+
+[[ -n "${_CONFIGU_SH_LOADED:-}" ]] && return 0
+readonly _CONFIGU_SH_LOADED=1
+
+source "$(dirname "${BASH_SOURCE[0]}")/dryrun.sh"
+
+function config_ler() {
+    # Lê e retorna o valor de uma chave em um arquivo de configuração.
+    # Remove aspas simples e duplas ao redor do valor, se presentes.
+    # Retorna 1 se o arquivo não existir ou a chave não for encontrada.
+    # Modo de uso: valor=$(config_ler /etc/app/config.env DB_HOST)
+    local arquivo="$1"
+    local chave="$2"
+
+    if [ ! -f "$arquivo" ]; then
+        return 1
+    fi
+
+
+    local valor
+    valor=$(grep -F "^${chave}=" "$arquivo" | cut -d'=' -f2-)
+
+    if [ -z "$valor" ]; then
+        return 1
+    fi
+
+    # Remove aspas ao redor do valor
+    local valor
+    valor="${valor#[\'\"]}"
+    valor="${valor%[\'\"]}"
+
+    echo "$valor"
+}
+
+function config_existe() {
+    # Retorna 0 se a chave existir no arquivo de configuração, 1 caso contrário.
+    # Não lê nem retorna o valor — use config_ler para isso.
+    # Retorna 1 também se o arquivo não existir.
+    # Modo de uso: config_existe /etc/app.conf "DATABASE_URL" || erro "Configuração incompleta"
+    local arquivo="$1"
+    local chave="$2"
+    [[ ! -f "$arquivo" ]] && return 1
+    grep -qE "^${chave}=" "$arquivo"
+}
+
+function config_escrever() {
+    # Cria ou atualiza uma chave no arquivo de configuração.
+    # Se a chave já existir, seu valor é substituído na mesma linha.
+    # Se não existir, a chave é adicionada ao final do arquivo.
+    # O arquivo é criado automaticamente se não existir.
+    # Modo de uso: config_escrever /etc/app/config.env DB_PORT 5432
+    local arquivo="$1"
+    local chave="$2"
+    local valor="$3"
+
+    if grep -qE "^${chave}=" "$arquivo" 2>/dev/null; then
+        local valor_esc="${valor//\\/\\\\}"
+        valor_esc="${valor_esc//&/\\&}"
+        valor_esc="${valor_esc//|/\\|}"
+        dryrun_exec "config_escrever: substituir '${chave}' em '$arquivo'" \
+            sed -i "s|^${chave}=.*|${chave}=${valor_esc}|" "$arquivo"
+    else
+        dryrun_gravar "$arquivo" "${chave}=${valor}"
+    fi
+}
+
+function config_remover() {
+    # Remove uma chave e seu valor do arquivo de configuração.
+    # Retorna 1 se o arquivo não existir.
+    # Modo de uso: config_remover /etc/app/config.env DB_PASSWORD
+    local arquivo="$1"
+    local chave="$2"
+
+    if [ ! -f "$arquivo" ]; then
+        return 1
+    fi
+
+    dryrun_exec "config_remover: remover '${chave}' de '$arquivo'" \
+        sed -i "/^${chave}=/d" "$arquivo"
+}
+
+function config_carregar() {
+    # Importa todas as chaves do arquivo como variáveis de ambiente exportadas.
+    # Linhas em branco e comentários (iniciados com #) são ignorados.
+    # Aspas simples e duplas ao redor dos valores são removidas automaticamente.
+    # Modo de uso: config_carregar /etc/app/config.env
+    #              echo $DB_HOST   # variável agora disponível no script
+    local arquivo="$1"
+
+    if [ ! -f "$arquivo" ]; then
+        echo "Arquivo não encontrado: $arquivo" >&2
+        return 1
+    fi
+
+    if [ "${DRYRUN:-}" = "1" ]; then
+        echo "[DRY-RUN] config_carregar: não exportar variáveis de '$arquivo'" >&2
+        return 0
+    fi
+
+    while IFS= read -r linha; do
+        # Ignora linhas vazias e comentários
+        [[ -z "$chave" || "$chave" =~ ^[[:space:]]*# ]] && continue
+
+        # Remove espaços ao redor da chave
+        local chave="${chave//[[:space:]]/}"
+
+        # Remove aspas ao redor do valor
+        local valor="${valor#[\'\"]}"
+        local valor="${valor%[\'\"]}"
+
+        export "$chave=$valor"
+    done < "$arquivo"
+}
+
+================================================================
+ ARQUIVO: lib/cores.sh
+================================================================
+# shellcheck shell=bash
+# cores.sh - Funções para estilização de texto no terminal usando códigos de escape ANSI
+#
+# Permite exibir texto colorido no terminal de forma simples.
+# Os códigos ANSI funcionam na maioria dos terminais modernos compatíveis com VT100.
+#
+# Dependências: nenhuma
+#
+# Funções disponíveis:
+#   cor_vermelho <texto> - Exibe texto em vermelho
+#   cor_verde    <texto> - Exibe texto em verde
+#   cor_amarelo  <texto> - Exibe texto em amarelo
+#   cor_azul     <texto> - Exibe texto em azul
+#
+# Todas as funções terminam com \n, funcionando tanto standalone quanto inline.
+# Uso standalone: cor_verde "operação concluída"
+# Uso inline:     printf "Resultado: %s e %s\n" "$(cor_verde OK)" "$(cor_vermelho FALHOU)"
+#                 (a substituição de comando absorve o \n interno)
+
+[[ -n "${_CORES_SH_LOADED:-}" ]] && return 0
+readonly _CORES_SH_LOADED=1
+
+function cor_vermelho() {
+    # Exibe o texto em vermelho seguido de quebra de linha.
+    # Modo de uso: cor_vermelho "mensagem de erro"
+    #              printf "Status: %s\n" "$(cor_vermelho FALHOU)"
+    printf '\033[31m%s\033[0m\n' "$1"
+}
+
+function cor_verde() {
+    # Exibe o texto em verde seguido de quebra de linha.
+    # Modo de uso: cor_verde "operação concluída"
+    #              printf "Status: %s\n" "$(cor_verde OK)"
+    printf '\033[32m%s\033[0m\n' "$1"
+}
+
+function cor_amarelo() {
+    # Exibe o texto em amarelo seguido de quebra de linha.
+    # Modo de uso: cor_amarelo "atenção: verifique as configurações"
+    #              printf "[%s] mensagem\n" "$(cor_amarelo AVISO)"
+    printf '\033[33m%s\033[0m\n' "$1"
+}
+
+function cor_azul() {
+    # Exibe o texto em azul seguido de quebra de linha.
+    # Modo de uso: cor_azul "informação adicional"
+    #              printf "[%s] Sistema iniciado\n" "$(cor_azul INFO)"
+    printf '\033[34m%s\033[0m\n' "$1"
+}
+
+================================================================
+ ARQUIVO: lib/crypto.sh
+================================================================
+# shellcheck shell=bash
+# Funções relacionadas à criptografia usando OpenSSL.
+
+source "$(dirname "${BASH_SOURCE[0]}")/systemu.sh"
+source "$(dirname "${BASH_SOURCE[0]}")/alerta.sh"
+
+[[ -n "${_CRYPTO_SH_LOADED:-}" ]] && return 0
+readonly _CRYPTO_SH_LOADED=1
+
+function crypt_gerar_chave() {
+    # Gera uma chave criptográfica usando OpenSSL.
+    if ! sys_programa_esta_instalado "openssl"; then
+        erro "OpenSSL não está instalado. Instale-o para usar esta função."
+        return 1
+    fi
+    openssl rand -hex 32
+}
+
+function crypt_hash_string() {
+    # Retorna o hash SHA256 de uma string fornecida.
+    if ! sys_programa_esta_instalado "openssl"; then
+        erro "OpenSSL não está instalado. Instale-o para usar esta função."
+        return 1
+    fi
+    echo -n "$1" | openssl dgst -sha256
+}
+
+function crypt_hash_md5() {
+    # Retorna o hash MD5 de uma string fornecida.
+    if ! sys_programa_esta_instalado "openssl"; then
+        erro "OpenSSL não está instalado. Instale-o para usar esta função."
+        return 1
+    fi  
+    echo -n "$1" | openssl dgst -md5
+}
+
+function crypt_hash_sha1() {
+    # Retorna o hash SHA1 de uma string fornecida.
+    if ! sys_programa_esta_instalado "openssl"; then
+        erro "OpenSSL não está instalado. Instale-o para usar esta função."
+        return 1
+    fi
+    echo -n "$1" | openssl dgst -sha1
+}
+
+function crypt_hash_de_arquivo() {
+    # Retorna o hash SHA256 de um arquivo especificado.
+    if ! sys_programa_esta_instalado "openssl"; then
+        erro "OpenSSL não está instalado. Instale-o para usar esta função."
+        return 1
+    fi
+    openssl dgst -sha256 "$1"
+}
+
+function crypt_valida_hash_de_arquivo() {
+    # Compara o hash SHA256 de um arquivo com um hash esperado.
+    if ! sys_programa_esta_instalado "openssl"; then
+        erro "OpenSSL não está instalado. Instale-o para usar esta função."
+        return 1
+    fi
+    local file_hash
+    file_hash=$(openssl dgst -sha256 "$1" | awk '{print $NF}')
+    if [ "$file_hash" == "$2" ]; then
+        return 0
+    else
+        return 1
+    fi
+}
+================================================================
+ ARQUIVO: lib/datau.sh
+================================================================
+# shellcheck shell=bash
+# datau.sh - Funções utilitárias para manipulação de data e tempo
+#
+# Fornece funções para formatação de datas, cálculo de durações e
+# geração de timestamps para uso em nomes de arquivos e logs.
+#
+# Dependências: nenhuma
+#
+# Funções disponíveis:
+#   timestamp          - Retorna data/hora compacta para nomes de arquivo
+#   data_formatada     - Retorna data/hora legível (DD/MM/YYYY HH:MM:SS)
+#   data_iso           - Retorna data no formato ISO 8601
+#   data_unix          - Retorna o timestamp Unix atual (segundos desde epoch)
+#   duracao            - Calcula segundos entre dois timestamps Unix
+#   duracao_formatada  - Converte segundos para o formato HH:MM:SS
+
+[[ -n "${_DATAU_SH_LOADED:-}" ]] && return 0
+readonly _DATAU_SH_LOADED=1
+
+function timestamp() {
+    # Retorna a data e hora atual em formato compacto, sem espaços ou separadores,
+    # adequado para uso em nomes de arquivos e diretórios.
+    # Formato: YYYYMMDD_HHMMSS
+    # Modo de uso: arquivo="backup_$(timestamp).tar.gz"
+    date '+%Y%m%d_%H%M%S'
+}
+
+function data_formatada() {
+    # Retorna a data e hora atual em formato legível para exibição ao usuário.
+    # Formato: DD/MM/YYYY HH:MM:SS
+    # Modo de uso: echo "Iniciado em: $(data_formatada)"
+    date '+%d/%m/%Y %H:%M:%S'
+}
+
+function data_iso() {
+    # Retorna a data e hora atual no formato ISO 8601, amplamente usado em
+    # integrações com APIs e sistemas externos.
+    # Formato: YYYY-MM-DDTHH:MM:SS
+    # Modo de uso: echo "Timestamp ISO: $(data_iso)"
+    date '+%Y-%m-%dT%H:%M:%S'
+}
+
+function data_unix() {
+    # Retorna o timestamp Unix atual: número de segundos desde 01/01/1970 00:00:00 UTC.
+    # Útil como ponto de referência para calcular durações com duracao().
+    # Modo de uso: inicio=$(data_unix)
+    #              # ... operações ...
+    #              fim=$(data_unix)
+    #              echo "Duração: $(duracao $inicio $fim) segundos"
+    date '+%s'
+}
+
+function duracao() {
+    # Calcula a duração em segundos entre dois timestamps Unix.
+    # Os valores de início e fim devem ser obtidos com data_unix() ou date '+%s'.
+    # Modo de uso: duracao <inicio> <fim>
+    #              duracao 1700000000 1700003600   # retorna 3600
+    local inicio="$1"
+    local fim="$2"
+    echo $(( fim - inicio ))
+}
+
+function duracao_formatada() {
+    # Converte uma duração em segundos para o formato legível HH:MM:SS.
+    # Combina bem com duracao() para exibir o tempo decorrido de uma operação.
+    # Modo de uso: duracao_formatada 3661   # retorna 01:01:01
+    #              duracao_formatada $(duracao $inicio $(data_unix))
+    local segundos_total="$1"
+    local horas=$(( segundos_total / 3600 ))
+    local minutos=$(( (segundos_total % 3600) / 60 ))
+    local segundos=$(( segundos_total % 60 ))
+    printf '%02d:%02d:%02d' "$horas" "$minutos" "$segundos"
+}
+
+================================================================
+ ARQUIVO: lib/diru.sh
+================================================================
+# shellcheck shell=bash
+# diru.sh - Funções para inspeção e metadados de diretórios
+#
+# Fornece operações de contagem, listagem e consulta de metadados sobre
+# diretórios e seu conteúdo. Todas as funções operam recursivamente
+# (incluindo subdiretórios) salvo indicação em contrário.
+#
+# Todas as funções retornam 1 se o diretório informado não existir.
+# Erros de permissão em subdiretórios são suprimidos silenciosamente.
+#
+# Dependências: nenhuma
+#
+# Funções disponíveis:
+#   dir_tamanho_do_diretorio          <dir>  - Tamanho total em formato legível (ex: 1.4G, 234M)
+#   dir_contar_arquivos               <dir>  - Número de arquivos regulares (recursivo)
+#   dir_contar_diretorios             <dir>  - Número de diretórios (recursivo, inclui o próprio dir)
+#   dir_contar_links_simbolicos       <dir>  - Número de links simbólicos (recursivo)
+#   dir_contar_tudo                   <dir>  - Total de todos os itens (recursivo, inclui o próprio dir)
+#   dir_listar_arquivos               <dir>  - Caminhos completos de todos os arquivos regulares
+#   dir_listar_diretorios             <dir>  - Caminhos completos de todos os diretórios
+#   dir_listar_links_simbolicos       <dir>  - Caminhos completos de todos os links simbólicos
+#   dir_listar_tudo                   <dir>  - Caminhos completos de todos os itens
+#   dir_permissoes_do_diretorio       <dir>  - Permissões no formato rwxr-xr-x
+#   dir_dono_do_diretorio             <dir>  - Nome do usuário proprietário
+#   dir_grupo_do_diretorio            <dir>  - Nome do grupo proprietário
+#   dir_get_data_hora_ultima_modificacao <dir> - Data e hora da última modificação
+
+
+[[ -n "${_DIRU_SH_LOADED:-}" ]] && return 0
+readonly _DIRU_SH_LOADED=1
+
+function dir_tamanho_do_diretorio() {
+    # Retorna o tamanho total do diretório e de todo o seu conteúdo em formato
+    # legível por humanos (ex: 4.0K, 234M, 1.4G). Usa du -sh internamente.
+    # Retorna 1 se o diretório não existir.
+    # Modo de uso: dir_tamanho_do_diretorio /var/log
+    #              echo "Logs ocupam: $(dir_tamanho_do_diretorio /var/log)"
+    local diretorio="$1"
+    if [[ -d "$diretorio" ]]; then
+        du -sh "$diretorio" 2>/dev/null | cut -f1
+    else
+        return 1
+    fi
+}
+
+function dir_contar_arquivos() {
+    # Conta o número de arquivos regulares dentro do diretório, incluindo
+    # subdirectórios em qualquer profundidade. Links simbólicos e diretórios
+    # não são contados — apenas arquivos do tipo regular (tipo f).
+    # Retorna 1 se o diretório não existir.
+    # Modo de uso: dir_contar_arquivos /etc
+    #              if [ "$(dir_contar_arquivos /tmp)" -gt 100 ]; then echo "muitos arquivos"; fi
+    local diretorio="$1"
+    if [[ -d "$diretorio" ]]; then
+        find "$diretorio" -type f 2>/dev/null | wc -l
+    else
+        return 1
+    fi
+}
+
+function dir_contar_diretorios() {
+    # Conta o número de diretórios dentro do diretório informado, incluindo
+    # subdirectórios em qualquer profundidade.
+    # ATENÇÃO: o próprio diretório raiz é incluído na contagem. Um diretório
+    # vazio retorna 1 (ele mesmo), não 0.
+    # Retorna 1 se o diretório não existir.
+    # Modo de uso: dir_contar_diretorios /etc
+    #              subdirs=$(( $(dir_contar_diretorios /etc) - 1 ))  # descontar o próprio dir
+    local diretorio="$1"
+    if [[ -d "$diretorio" ]]; then
+        find "$diretorio" -type d 2>/dev/null | wc -l
+    else
+        return 1
+    fi
+}
+
+function dir_contar_links_simbolicos() {
+    # Conta o número de links simbólicos dentro do diretório, incluindo
+    # subdirectórios em qualquer profundidade.
+    # Links quebrados (que apontam para alvos inexistentes) também são contados.
+    # Retorna 1 se o diretório não existir.
+    # Modo de uso: dir_contar_links_simbolicos /usr/bin
+    local diretorio="$1"
+    if [[ -d "$diretorio" ]]; then
+        find "$diretorio" -type l 2>/dev/null | wc -l
+    else
+        return 1
+    fi
+}
+
+function dir_contar_tudo() {
+    # Conta o número total de itens dentro do diretório: arquivos regulares,
+    # subdirectórios e links simbólicos, em qualquer profundidade.
+    # ATENÇÃO: o próprio diretório raiz é incluído na contagem.
+    # Retorna 1 se o diretório não existir.
+    # Modo de uso: dir_contar_tudo /home/usuario
+    local diretorio="$1"
+    if [[ -d "$diretorio" ]]; then
+        find "$diretorio" 2>/dev/null | wc -l
+    else
+        return 1
+    fi
+}
+
+function dir_listar_arquivos() {
+    # Lista os caminhos completos de todos os arquivos regulares dentro do
+    # diretório, incluindo subdirectórios em qualquer profundidade.
+    # Cada caminho é impresso em uma linha separada. Links simbólicos e
+    # diretórios não são incluídos.
+    # Retorna 1 se o diretório não existir.
+    # Modo de uso: dir_listar_arquivos /etc/nginx
+    #              dir_listar_arquivos /var/log | grep "\.log$"
+    #              dir_listar_arquivos /tmp | xargs rm -f
+    local diretorio="$1"
+    if [[ -d "$diretorio" ]]; then
+        find "$diretorio" -type f 2>/dev/null
+    else
+        return 1
+    fi
+}
+
+function dir_listar_diretorios() {
+    # Lista os caminhos completos de todos os diretórios dentro do diretório
+    # informado, incluindo subdirectórios em qualquer profundidade.
+    # ATENÇÃO: o próprio diretório raiz é incluído na listagem como primeiro item.
+    # Retorna 1 se o diretório não existir.
+    # Modo de uso: dir_listar_diretorios /etc
+    #              dir_listar_diretorios /var | grep "cache"
+    local diretorio="$1"
+    if [[ -d "$diretorio" ]]; then
+        find "$diretorio" -type d 2>/dev/null
+    else
+        return 1
+    fi
+}
+
+function dir_listar_links_simbolicos() {
+    # Lista os caminhos completos de todos os links simbólicos dentro do
+    # diretório, incluindo subdirectórios em qualquer profundidade.
+    # Links quebrados (alvos inexistentes) também são listados.
+    # Retorna 1 se o diretório não existir.
+    # Modo de uso: dir_listar_links_simbolicos /usr/bin
+    #              dir_listar_links_simbolicos /etc | xargs ls -la
+    local diretorio="$1"
+    if [[ -d "$diretorio" ]]; then
+        find "$diretorio" -type l 2>/dev/null
+    else
+        return 1
+    fi
+}
+
+function dir_listar_tudo() {
+    # Lista os caminhos completos de todos os itens dentro do diretório:
+    # arquivos regulares, subdirectórios e links simbólicos, em qualquer profundidade.
+    # ATENÇÃO: o próprio diretório raiz é incluído como primeiro item da listagem.
+    # Retorna 1 se o diretório não existir.
+    # Modo de uso: dir_listar_tudo /etc/nginx
+    #              dir_listar_tudo /var/log | wc -l
+    local diretorio="$1"
+    if [[ -d "$diretorio" ]]; then
+        find "$diretorio" 2>/dev/null
+    else
+        return 1
+    fi
+}
+
+function dir_permissoes_do_diretorio() {
+    # Retorna as permissões do diretório no formato simbólico rwxr-xr-x
+    # (10 caracteres: tipo + dono + grupo + outros).
+    # Equivalente à primeira coluna do ls -l.
+    # Retorna 1 se o diretório não existir.
+    # Modo de uso: dir_permissoes_do_diretorio /etc/ssh
+    #              if [[ "$(dir_permissoes_do_diretorio /var/secret)" == "drwx------" ]]; then
+    #                  echo "acesso restrito ao dono"
+    #              fi
+    local diretorio="$1"
+    if [[ -d "$diretorio" ]]; then
+        stat -c "%A" "$diretorio" 2>/dev/null
+    else
+        return 1
+    fi
+}
+
+function dir_dono_do_diretorio() {
+    # Retorna o nome de usuário do proprietário do diretório.
+    # Retorna 1 se o diretório não existir.
+    # Modo de uso: dir_dono_do_diretorio /var/www/html
+    #              if [[ "$(dir_dono_do_diretorio /app)" != "www-data" ]]; then
+    #                  erro "Diretório com dono incorreto"
+    #              fi
+    local diretorio="$1"
+    if [[ -d "$diretorio" ]]; then
+        stat -c "%U" "$diretorio" 2>/dev/null
+    else
+        return 1
+    fi
+}
+
+function dir_grupo_do_diretorio() {
+    # Retorna o nome do grupo proprietário do diretório.
+    # Retorna 1 se o diretório não existir.
+    # Modo de uso: dir_grupo_do_diretorio /var/www/html
+    #              if [[ "$(dir_grupo_do_diretorio /dados)" != "deploy" ]]; then
+    #                  alerta "Grupo do diretório não é 'deploy'"
+    #              fi
+    local diretorio="$1"
+    if [[ -d "$diretorio" ]]; then
+        stat -c "%G" "$diretorio" 2>/dev/null
+    else
+        return 1
+    fi
+}
+
+function dir_get_data_hora_ultima_modificacao() {
+    # Retorna a data e hora da última modificação do diretório no formato
+    # "YYYY-MM-DD HH:MM:SS.NNNNNNNNN +ZZZZ" (saída bruta do stat).
+    # A modificação do diretório ocorre quando arquivos são criados, renomeados
+    # ou removidos diretamente nele (não em subdirectórios).
+    # Retorna 1 se o diretório não existir.
+    # Modo de uso: dir_get_data_hora_ultima_modificacao /var/spool/cron
+    #              echo "Último acesso: $(dir_get_data_hora_ultima_modificacao /tmp)"
+    local diretorio="$1"
+    if [[ -d "$diretorio" ]]; then
+        stat -c "%y" "$diretorio" 2>/dev/null
+    else
+        return 1
+    fi
+}
+
+================================================================
+ ARQUIVO: lib/distu.sh
+================================================================
+# shellcheck shell=bash
+# distu.sh - Funções para detecção da distribuição e informações do sistema operacional
+#
+# Cada função de detecção verifica a existência de arquivos característicos
+# de cada distribuição em /etc/, retornando 0 se identificada e 1 caso contrário.
+#
+# Dependências: nenhuma
+#
+# Funções de detecção de distribuição:
+#   dist_e_debian   - Debian
+#   dist_e_ubuntu   - Ubuntu
+#   dist_e_fedora   - Fedora
+#   dist_e_arch     - Arch Linux
+#   dist_e_redhat   - Red Hat Enterprise Linux
+#   dist_e_suse     - SuSE Linux
+#   dist_e_gentoo   - Gentoo Linux
+#   dist_e_alpine   - Alpine Linux
+#   dist_e_opensuse - openSUSE
+#   dist_e_openbsd  - OpenBSD
+#   dist_e_freebsd  - FreeBSD
+#   dist_e_osx      - macOS
+#
+# Funções de informação do sistema:
+#   dist_nome_do_so        - Nome do sistema operacional
+#   dist_versao_do_so      - Versão do sistema operacional
+#   dist_versao_do_kernel  - Versão do kernel
+#   dist_arquitetura       - Arquitetura do processador (x86_64, arm64, etc.)
+#   dist_nome_do_host      - Nome do host
+#   dist_tempo_ligado      - Tempo de atividade do sistema
+
+
+
+[[ -n "${_DISTU_SH_LOADED:-}" ]] && return 0
+readonly _DISTU_SH_LOADED=1
+
+function dist_e_debian() {
+    # Verifica se o sistema é Debian, checando /etc/debian_version.
+    # Modo de uso: dist_e_debian && echo "É Debian"
+    if [ -f /etc/debian_version ]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+function dist_e_ubuntu() {
+    # Verifica se o sistema é Ubuntu, checando a presença de "Ubuntu" em /etc/lsb-release.
+    # Modo de uso: dist_e_ubuntu && echo "É Ubuntu"
+    if [ -f /etc/lsb-release ] && grep -q "Ubuntu" /etc/lsb-release; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+function dist_e_fedora() {
+    # Verifica se o sistema é Fedora, checando /etc/fedora-release.
+    # Modo de uso: dist_e_fedora && echo "É Fedora"
+    if [ -f /etc/fedora-release ]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+function dist_e_arch() {
+    # Verifica se o sistema é Arch Linux, checando /etc/arch-release.
+    # Modo de uso: dist_e_arch && echo "É Arch Linux"
+    if [ -f /etc/arch-release ]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+function dist_e_redhat() {
+    # Verifica se o sistema é Red Hat Enterprise Linux, checando /etc/redhat-release.
+    # Modo de uso: dist_e_redhat && echo "É Red Hat"
+    if [ -f /etc/redhat-release ]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+function dist_e_suse() {
+    # Verifica se o sistema é SuSE Linux, checando /etc/SuSE-release.
+    # Modo de uso: dist_e_suse && echo "É SuSE"
+    if [ -f /etc/SuSE-release ]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+function dist_e_gentoo() {
+    # Verifica se o sistema é Gentoo Linux, checando /etc/gentoo-release.
+    # Modo de uso: dist_e_gentoo && echo "É Gentoo"
+    if [ -f /etc/gentoo-release ]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+function dist_e_alpine() {
+    # Verifica se o sistema é Alpine Linux, checando /etc/alpine-release.
+    # Modo de uso: dist_e_alpine && echo "É Alpine"
+    if [ -f /etc/alpine-release ]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+function dist_e_opensuse() {
+    # Verifica se o sistema é openSUSE, checando a presença de "openSUSE" em /etc/os-release.
+    # Modo de uso: dist_e_opensuse && echo "É openSUSE"
+    if [ -f /etc/os-release ] && grep -q "openSUSE" /etc/os-release; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+function dist_e_openbsd() {
+    # Verifica se o sistema é OpenBSD, checando a presença de "OpenBSD" em /etc/os-release.
+    # Modo de uso: dist_e_openbsd && echo "É OpenBSD"
+    if [ -f /etc/os-release ] && grep -q "OpenBSD" /etc/os-release; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+function dist_e_freebsd() {
+    # Verifica se o sistema é FreeBSD, checando a presença de "FreeBSD" em /etc/os-release.
+    # Modo de uso: dist_e_freebsd && echo "É FreeBSD"
+    if [ -f /etc/os-release ] && grep -q "FreeBSD" /etc/os-release; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+function dist_e_osx() {
+    # Verifica se o sistema é macOS, checando a existência do arquivo de versão do sistema Apple.
+    # Modo de uso: dist_e_osx && echo "É macOS"
+    if [ -f /System/Library/CoreServices/SystemVersion.plist ]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+function dist_nome_do_so() {
+    # Retorna o nome do sistema operacional lendo a variável NAME de /etc/os-release.
+    # Modo de uso: echo "Sistema: $(dist_nome_do_so)"
+    if [ -f /etc/os-release ]; then
+        . /etc/os-release
+        echo "$NAME"
+    else
+        echo "Desconecido"
+    fi
+}
+
+function dist_versao_do_so() {
+    # Retorna a versão do sistema operacional lendo VERSION_ID de /etc/os-release.
+    # Modo de uso: echo "Versão: $(dist_versao_do_so)"
+    if [ -f /etc/os-release ]; then
+        . /etc/os-release
+        echo "$VERSION_ID"
+    else
+        echo "Desconecido"
+    fi
+}
+
+function dist_versao_do_kernel() {
+    # Retorna a versão completa do kernel em execução.
+    # Modo de uso: echo "Kernel: $(dist_versao_do_kernel)"
+    uname -r
+}
+
+function dist_arquitetura() {
+    # Retorna a arquitetura do processador (ex: x86_64, aarch64, armv7l).
+    # Modo de uso: echo "Arquitetura: $(dist_arquitetura)"
+    uname -m
+}
+
+function dist_nome_do_host() {
+    # Retorna o nome de host da máquina.
+    # Modo de uso: echo "Host: $(dist_nome_do_host)"
+    uname -n
+}
+
+function dist_tempo_ligado() {
+    # Retorna o tempo de atividade do sistema em formato legível (ex: "up 2 hours, 30 minutes").
+    # Modo de uso: echo "tempo_ligado: $(dist_tempo_ligado)"
+    uptime -p
+}
+
+================================================================
+ ARQUIVO: lib/downu.sh
+================================================================
+# shellcheck shell=bash
+# downu.sh - Funções para download de arquivos via HTTP
+#
+# Detecta automaticamente a ferramenta de download disponível no sistema
+# (wget, curl ou fallback TCP nativo via /dev/tcp) e realiza o download
+# com a sintaxe correta de cada ferramenta.
+#
+# Quando DRYRUN="1", nenhum download é realizado nem arquivo criado:
+# as funções imprimem no stderr o que seria feito e retornam 0.
+#
+# Dependências: systemu.sh, dryrun.sh
+#
+# Funções disponíveis:
+#   dw_comando_de_download          - Detecta e retorna o nome da ferramenta de download disponível
+#   baixar_nativo    <url> <destino>         - Download via TCP puro (sem wget/curl)
+#   download         <url> [destino]         - Download com feedback no terminal
+#   download_quieto  <url> [destino]         - Download sem saída no terminal
+
+
+[[ -n "${_DOWNU_SH_LOADED:-}" ]] && return 0
+readonly _DOWNU_SH_LOADED=1
+
+source "$(dirname "${BASH_SOURCE[0]}")/systemu.sh"
+source "$(dirname "${BASH_SOURCE[0]}")/dryrun.sh"
+
+function dw_baixar_nativo() {
+    # 1. Validação de parâmetros
+    if [ "$#" -ne 2 ]; then
+        echo "Uso: dw_baixar_nativo <URL> <arquivo_saida>"
+        echo "Ex:  dw_baixar_nativo http://exemplo.com/pasta/arquivo.txt meu_arquivo.txt"
+        return 1
+    fi
+
+    local url="$1"
+    local arquivo_saida="$2"
+
+    if [ "${DRYRUN:-}" = "1" ]; then
+        echo "[DRY-RUN] dw_baixar_nativo: baixar '$url' → '$arquivo_saida'" >&2
+        return 0
+    fi
+
+    # 2. Extração do Host e do Caminho da URL
+    # Remove o prefixo "http://" se existir
+    local url_limpa="${url#http://}"
+    
+    # Extrai o domínio (tudo antes da primeira barra)
+    local host="${url_limpa%%/*}"
+    
+    # Extrai o caminho (tudo depois da primeira barra). Se não houver, assume "/"
+    local path="/${url_limpa#*/}"
+    if [ "$path" == "/$host" ]; then
+        path="/"
+    fi
+
+    # 3. Execução da conexão TCP
+    echo "Conectando a $host na porta 80..."
+    
+    # Tenta abrir o descritor de arquivo 3. Em caso de falha, exibe erro.
+    if ! exec 3<>/dev/tcp/"$host"/80; then
+        echo "Erro: Não foi possível conectar a $host"
+        return 1
+    fi
+
+    echo "Baixando $path para $arquivo_saida..."
+
+    # Envia a requisição HTTP GET
+    echo -e "GET $path HTTP/1.1\r\nHost: $host\r\nConnection: close\r\n\r\n" >&3
+
+    # 4. Tratamento do retorno
+    # A resposta virá com os cabeçalhos HTTP. Precisamos remover isso.
+    # O sed deleta tudo (1,/^\r$/d) desde a linha 1 até a primeira linha vazia (que separa os cabeçalhos do corpo do arquivo)
+    cat <&3 | sed '1,/^\r$/d' > "$arquivo_saida"
+    
+    # Fecha o descritor de arquivo
+    exec 3<&-
+    exec 3>&-
+
+    echo "Download concluído!"
+}
+
+function dw_comando_de_download() {
+    if sys_programa_esta_instalado "wget"; then
+        echo "wget"
+    elif sys_programa_esta_instalado "curl"; then
+        echo "curl"
+    else
+        echo "baixar_nativo"
+    fi
+}
+
+function dw_download() {
+    local url="$1"
+    local destino="$2"
+
+    if [ -z "$url" ]; then
+        echo "Uso: dw_download <url> [arquivo_destino]"
+        return 1
+    fi
+
+    if [ -z "$destino" ]; then
+        destino="${url##*/}"
+        destino="${destino%%\?*}"
+    fi
+
+    local cmd
+    cmd=$(dw_comando_de_download)
+
+    case "$cmd" in
+        wget)
+            dryrun_exec "dw_download: wget -O '$destino' '$url'" wget -O "$destino" "$url"
+            ;;
+        curl)
+            dryrun_exec "dw_download: curl -L -o '$destino' '$url'" curl -L -o "$destino" "$url"
+            ;;
+        baixar_nativo)
+            dw_baixar_nativo "$url" "$destino"
+            ;;
+    esac
+}
+
+function dw_download_quieto() {
+    # Em dry-run, deixa as mensagens de simulação passarem (não suprime stderr)
+    if [ "${DRYRUN:-}" = "1" ]; then
+        dw_download "$@"
+        return $?
+    fi
+    dw_download "$@" &>/dev/null
+}
+================================================================
+ ARQUIVO: lib/dryrun.sh
+================================================================
+# shellcheck shell=bash
+# dryrun.sh - Suporte a modo dry-run global para simulação de operações
+#
+# Quando DRYRUN="1", todas as funções da biblioteca que causam efeitos colaterais
+# (escrita em disco, execução de comandos, chamadas de rede, modificação de sistema)
+# simulam a operação sem executá-la, imprimindo no stderr o que seria feito.
+# Quando DRYRUN="" (padrão), o comportamento é idêntico ao normal.
+#
+# Para ativar o dry-run a partir da linha de comando com argsu.sh:
+#   arg_definir "--dry-run" DRYRUN "" "Simula operações sem executar nada" "boolean"
+#   arg_parsear "$@" || exit 1
+#
+# Dependências: nenhuma
+#
+# Variável global:
+#   DRYRUN   "1" ativa o modo dry-run; "" (padrão) executa normalmente
+#
+# Funções disponíveis:
+#   dryrun_exec    <descricao> <cmd...>   - Executa cmd ou simula em dry-run
+#   dryrun_gravar  <arquivo>   <conteudo> - Acrescenta linha ao arquivo ou simula
+#   dryrun_ativo                          - Retorna 0 se dry-run estiver ativo
+
+
+[[ -n "${_DRYRUN_SH_LOADED:-}" ]] && return 0
+readonly _DRYRUN_SH_LOADED=1
+
+# "1" ativa o modo dry-run; "" (padrão) executa normalmente
+DRYRUN="${DRYRUN:-}"
+
+function dryrun_exec() {
+    # Executa um comando com seus argumentos, ou simula a execução em dry-run.
+    # Em dry-run: imprime "[DRY-RUN] <descricao>" no stderr e retorna 0.
+    # Em modo normal: executa o comando e retorna seu código de saída.
+    # Modo de uso: dryrun_exec "cp arquivo destino" cp arquivo destino
+    local descricao="$1"
+    shift
+    if [ "${DRYRUN:-}" = "1" ]; then
+        echo "[DRY-RUN] $descricao" >&2
+        return 0
+    fi
+    "$@"
+}
+
+function dryrun_gravar() {
+    # Acrescenta uma linha ao arquivo, ou simula a escrita em dry-run.
+    # Em dry-run: imprime "[DRY-RUN] escrever em '<arquivo>': <conteudo>" no stderr.
+    # Em modo normal: executa echo "<conteudo>" >> "<arquivo>".
+    # Modo de uso: dryrun_gravar /etc/app/config.env "CHAVE=valor"
+    local arquivo="$1"
+    local conteudo="$2"
+    if [ "${DRYRUN:-}" = "1" ]; then
+        echo "[DRY-RUN] escrever em '$arquivo': $conteudo" >&2
+        return 0
+    fi
+    echo "$conteudo" >> "$arquivo"
+}
+
+function dryrun_ativo() {
+    # Retorna 0 se o modo dry-run estiver ativo, 1 caso contrário.
+    # Modo de uso: dryrun_ativo && echo "Modo simulação ativo"
+    [ "${DRYRUN:-}" = "1" ]
+}
+
+================================================================
+ ARQUIVO: lib/filesu.sh
+================================================================
+# shellcheck shell=bash
+# filesu.sh - Funções para verificação e metadados de arquivos
+#
+# Fornece predicados de existência, tipo e permissão, funções de conversão
+# de tamanho, comparação entre arquivos e espera por eventos no sistema de arquivos.
+#
+# Todas as funções de predicado (e_*, arquivo_*) retornam 0 para verdadeiro e
+# 1 para falso, seguindo a convenção de exit code do bash, o que permite uso
+# direto em condicionais sem captura de saída.
+#
+# Dependências: nenhuma
+#
+# Funções disponíveis:
+#   arquivo_existe               <arquivo>            - Verdadeiro se o arquivo existir
+#   e_arquivo_vazio              <arquivo>            - Verdadeiro se existir e tiver 0 bytes
+#   e_arquivo_regular            <arquivo>            - Verdadeiro se for arquivo regular (não dir, não link)
+#   e_diretorio                  <arquivo>            - Verdadeiro se for diretório
+#   e_link_simbolico             <arquivo>            - Verdadeiro se for link simbólico
+#   e_executavel                 <arquivo>            - Verdadeiro se tiver permissão de execução
+#   e_legivel                    <arquivo>            - Verdadeiro se tiver permissão de leitura
+#   e_gravavel                   <arquivo>            - Verdadeiro se tiver permissão de escrita
+#   e_de_propriedade_do_usuario  <arquivo> <usuario>  - Verdadeiro se o usuário for o dono
+#   e_de_propriedade_do_grupo    <arquivo> <grupo>    - Verdadeiro se o grupo for o dono
+#   bytes_legivel                <bytes>              - Converte bytes para formato legível (1.4 GB)
+#   tamanho_do_arquivo           <arquivo>            - Tamanho em bytes (inteiro)
+#   bytes_em_kilobytes           <bytes>              - Converte bytes para KB (inteiro)
+#   bytes_em_megabytes           <bytes>              - Converte bytes para MB (inteiro)
+#   bytes_em_gigabytes           <bytes>              - Converte bytes para GB (inteiro)
+#   compara_tamanho_dos_arquivo_ab <A> <B>            - Compara tamanhos via exit code
+#   diretorio_do_arquivo         <arquivo>            - Diretório pai do arquivo
+#   nome_do_arquivo              <arquivo>            - Nome sem o caminho
+#   extensao_do_arquivo          <arquivo>            - Extensão sem o ponto (ex: "sh", "log")
+#   get_data_hora_ultima_modificacao <arquivo>        - Data e hora da última modificação
+#   aguardar_arquivo             <arquivo> <modo> [timeout] - Aguarda arquivo aparecer ou sumir
+
+
+[[ -n "${_FILESU_SH_LOADED:-}" ]] && return 0
+readonly _FILESU_SH_LOADED=1
+
+function arquivo_existe() {
+    # Retorna 0 se o caminho informado existir e for um arquivo regular.
+    # Retorna 1 para diretórios, links simbólicos quebrados e caminhos inexistentes.
+    # Modo de uso: arquivo_existe /etc/hosts && echo "hosts encontrado"
+    #              arquivo_existe "$config" || { erro "Configuração não encontrada"; exit 1; }
+    local arquivo="$1"
+    if [[ -f "$arquivo" ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+function e_arquivo_vazio() {
+    # Retorna 0 se o arquivo existir e seu tamanho for zero bytes.
+    # Retorna 1 se o arquivo não existir ou tiver conteúdo.
+    # Útil para verificar se um comando gerou saída antes de processar o resultado.
+    # Modo de uso: e_arquivo_vazio /tmp/saida.txt && erro "Nenhum resultado gerado"
+    #              e_arquivo_vazio "$log" || info "Log contém $(conta_linhas "$log") linhas"
+    local arquivo="$1"
+    if [[ -s "$arquivo" ]]; then
+        return 1
+    else
+        return 0
+    fi
+}
+
+function e_arquivo_regular() {
+    # Retorna 0 se o caminho existir e for um arquivo regular (não diretório,
+    # não dispositivo de bloco, não pipe, não socket).
+    # Links simbólicos que apontam para um arquivo regular retornam 0.
+    # Funcionalmente equivalente a arquivo_existe; use quando o contexto
+    # semântico for "tipo de entrada" em vez de "existência".
+    # Modo de uso: e_arquivo_regular "$entrada" || { erro "Esperado arquivo regular"; exit 1; }
+    local arquivo="$1"
+    if [[ -f "$arquivo" ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+function e_diretorio() {
+    # Retorna 0 se o caminho existir e for um diretório.
+    # Links simbólicos que apontam para um diretório retornam 0.
+    # Retorna 1 para arquivos regulares, pipes, sockets e caminhos inexistentes.
+    # Modo de uso: e_diretorio /var/backups || mkdir -p /var/backups
+    #              e_diretorio "$destino" || { erro "Destino não é diretório"; exit 1; }
+    local arquivo="$1"
+    if [[ -d "$arquivo" ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+function e_link_simbolico() {
+    # Retorna 0 se o caminho existir e for um link simbólico.
+    # Links quebrados (apontando para alvo inexistente) também retornam 0.
+    # Retorna 1 para arquivos regulares, diretórios e caminhos inexistentes.
+    # Modo de uso: e_link_simbolico /usr/bin/python && echo "python é um link"
+    local arquivo="$1"
+    if [[ -L "$arquivo" ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+function e_executavel() {
+    # Retorna 0 se o arquivo existir e o processo atual tiver permissão de execução.
+    # A permissão é verificada para o usuário efetivo (EUID) do processo.
+    # Retorna 1 se o arquivo não existir ou não for executável pelo usuário atual.
+    # Modo de uso: e_executavel /usr/bin/curl || { erro "curl não encontrado ou sem permissão"; exit 1; }
+    #              e_executavel "$script" || chmod +x "$script"
+    local arquivo="$1"
+    if [[ -x "$arquivo" ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+function e_legivel() {
+    # Retorna 0 se o arquivo existir e o processo atual tiver permissão de leitura.
+    # Retorna 1 se o arquivo não existir ou a leitura for negada pelo sistema.
+    # Útil antes de tentar ler arquivos que podem ter permissões restritas.
+    # Modo de uso: e_legivel /etc/shadow || { erro "Sem permissão para ler /etc/shadow"; exit 1; }
+    local arquivo="$1"
+    if [[ -r "$arquivo" ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+function e_gravavel() {
+    # Retorna 0 se o arquivo existir e o processo atual tiver permissão de escrita.
+    # Retorna 1 se o arquivo não existir ou a escrita for negada pelo sistema.
+    # Verificar antes de modificar evita erros parciais em scripts de automação.
+    # Modo de uso: e_gravavel "$config" || { erro "Arquivo de configuração somente leitura"; exit 1; }
+    local arquivo="$1"
+    if [[ -w "$arquivo" ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+function e_de_propriedade_do_usuario() {
+    # Retorna 0 se o arquivo pertencer ao usuário informado.
+    # Compara pelo nome de usuário, não pelo UID.
+    # Retorna 1 se o arquivo não existir ou pertencer a outro usuário.
+    # Modo de uso: e_de_propriedade_do_usuario /var/www/html "www-data" || alerta "Dono incorreto"
+    #              e_de_propriedade_do_usuario "$arq" "$(whoami)" || erro "Arquivo não é seu"
+    local arquivo="$1"
+    local usuario="$2"
+    if [[ $(stat -c "%U" "$arquivo") == "$usuario" ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+function e_de_propriedade_do_grupo() {
+    # Retorna 0 se o arquivo pertencer ao grupo informado.
+    # Compara pelo nome do grupo, não pelo GID.
+    # Retorna 1 se o arquivo não existir ou pertencer a outro grupo.
+    # Modo de uso: e_de_propriedade_do_grupo /var/log/app "syslog" || alerta "Grupo incorreto"
+    local arquivo="$1"
+    local grupo="$2"
+    if [[ $(stat -c "%G" "$arquivo") == "$grupo" ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+function bytes_legivel() {
+    # Converte um valor em bytes para formato legível por humanos com unidade automática.
+    # Usa uma casa decimal para KB, MB, GB e TB; inteiro puro para valores menores que 1 KB.
+    # Retorna a string formatada no stdout (ex: "512 B", "1.4 KB", "234.7 MB", "2.1 GB").
+    # Modo de uso: bytes_legivel 1503238553          → "1.4 GB"
+    #              bytes_legivel 512                 → "512 B"
+    #              echo "Tamanho: $(bytes_legivel "$(tamanho_do_arquivo /var/log/syslog)")"
+    local bytes="$1"
+    awk -v b="$bytes" 'BEGIN {
+        split("B KB MB GB TB", u)
+        n = 1
+        while (b >= 1024 && n < 5) { b /= 1024; n++ }
+        if (n == 1) printf "%d %s\n", b, u[n]
+        else        printf "%.1f %s\n", b, u[n]
+    }'
+}
+
+function tamanho_do_arquivo() {
+    # Retorna o tamanho do arquivo em bytes como inteiro puro, sem unidade.
+    # Use bytes_legivel para converter para formato humano, ou bytes_em_kilobytes/
+    # bytes_em_megabytes/bytes_em_gigabytes para conversões inteiras.
+    # Retorna 1 se o arquivo não existir.
+    # Modo de uso: tamanho_do_arquivo /var/log/syslog         → 45231
+    #              tam=$(tamanho_do_arquivo "$arq")
+    #              [ "$tam" -gt 1048576 ] && alerta "Arquivo maior que 1 MB"
+    local arquivo="$1"
+    if [[ -f "$arquivo" ]]; then
+        stat -c "%s" "$arquivo"
+    else
+        return 1
+    fi
+}
+
+function bytes_em_kilobytes() {
+    # Converte bytes para kilobytes usando divisão inteira (sem arredondamento).
+    # Para formato com unidade legível, prefira bytes_legivel.
+    # Modo de uso: bytes_em_kilobytes 2048    → 2
+    #              bytes_em_kilobytes 1500    → 1   (truncamento inteiro)
+    local bytes="$1"
+    echo $((bytes / 1024))
+}
+
+function bytes_em_megabytes() {
+    # Converte bytes para megabytes usando divisão inteira (sem arredondamento).
+    # Para formato com unidade legível, prefira bytes_legivel.
+    # Modo de uso: bytes_em_megabytes 5242880    → 5
+    local bytes="$1"
+    echo $((bytes / 1024 / 1024))
+}
+
+function bytes_em_gigabytes() {
+    # Converte bytes para gigabytes usando divisão inteira (sem arredondamento).
+    # Para formato com unidade legível, prefira bytes_legivel.
+    # Modo de uso: bytes_em_gigabytes 10737418240    → 10
+    local bytes="$1"
+    echo $((bytes / 1024 / 1024 / 1024))
+}
+
+function compara_tamanho_dos_arquivo_ab() {
+    # Compara o tamanho em bytes de dois arquivos e sinaliza o resultado via exit code:
+    #   0  — os dois arquivos têm o mesmo tamanho
+    #   1  — o arquivo A é maior que o arquivo B
+    #   2  — o arquivo A é menor que o arquivo B
+    #   3  — um ou ambos os arquivos não existem
+    #
+    # O resultado é comunicado APENAS pelo exit code — nenhuma saída é impressa.
+    # Use em case/if para distinguir os três casos possíveis.
+    #
+    # Modo de uso:
+    #   compara_tamanho_dos_arquivo_ab original.tar backup.tar
+    #   case $? in
+    #       0) echo "Tamanhos idênticos"         ;;
+    #       1) echo "Original é maior que backup" ;;
+    #       2) echo "Backup é maior que original" ;;
+    #       3) erro "Um dos arquivos não existe"  ;;
+    #   esac
+    local arquivoA="$1"
+    local arquivoB="$2"
+    if [[ ! -f "$arquivoA" || ! -f "$arquivoB" ]]; then
+        return 3
+    fi
+    local sizeA sizeB
+    sizeA=$(stat -c "%s" "$arquivoA")
+    sizeB=$(stat -c "%s" "$arquivoB")
+    if [[ $sizeA -gt $sizeB ]]; then
+        return 1
+    elif [[ $sizeA -lt $sizeB ]]; then
+        return 2
+    else
+        return 0
+    fi
+}
+
+function diretorio_do_arquivo() {
+    # Retorna o caminho do diretório que contém o arquivo (equivalente ao dirname).
+    # O arquivo deve existir; retorna 1 caso contrário.
+    # Modo de uso: diretorio_do_arquivo /etc/nginx/nginx.conf   → "/etc/nginx"
+    #              cd "$(diretorio_do_arquivo "$0")"             (muda para o dir do script)
+    local arquivo="$1"
+    if [[ -f "$arquivo" ]]; then
+        dirname "$arquivo"
+    else
+        return 1
+    fi
+}
+
+function nome_do_arquivo() {
+    # Retorna apenas o nome do arquivo, sem o caminho (equivalente ao basename).
+    # O arquivo deve existir; retorna 1 caso contrário.
+    # Modo de uso: nome_do_arquivo /etc/nginx/nginx.conf   → "nginx.conf"
+    #              nome=$(nome_do_arquivo "$caminho_completo")
+    local arquivo="$1"
+    if [[ -f "$arquivo" ]]; then
+        basename "$arquivo"
+    else
+        return 1
+    fi
+}
+
+function extensao_do_arquivo() {
+    # Retorna a extensão do arquivo sem o ponto separador.
+    # Se o arquivo não tiver extensão, retorna o nome completo.
+    # O arquivo deve existir; retorna 1 caso contrário.
+    # Modo de uso: extensao_do_arquivo /var/log/app.log     → "log"
+    #              extensao_do_arquivo /usr/bin/bash         → "bash"  (sem extensão)
+    #              ext=$(extensao_do_arquivo "$arq")
+    #              [ "$ext" = "sh" ] || erro "Esperado arquivo .sh"
+    local arquivo="$1"
+    if [[ -f "$arquivo" ]]; then
+        echo "${arquivo##*.}"
+    else
+        return 1
+    fi
+}
+
+function get_data_hora_ultima_modificacao() {
+    # Retorna a data e hora da última modificação do arquivo no formato
+    # "YYYY-MM-DD HH:MM:SS.NNNNNNNNN +ZZZZ" (saída bruta do stat).
+    # Para arquivos, a modificação ocorre quando o conteúdo é alterado.
+    # Funciona também com diretórios (modificação ocorre quando o conteúdo muda).
+    # Retorna 1 se o caminho não existir.
+    # Modo de uso: get_data_hora_ultima_modificacao /etc/hosts
+    #              echo "Modificado em: $(get_data_hora_ultima_modificacao "$arq")"
+    local arquivo="$1"
+    if [[ -e "$arquivo" ]]; then
+        stat -c "%y" "$arquivo" 2>/dev/null
+    else
+        return 1
+    fi
+}
+
+function aguardar_arquivo() {
+    # Aguarda um arquivo aparecer ou desaparecer no sistema de arquivos,
+    # verificando a cada segundo até o timeout ser atingido.
+    # Útil em pipelines de automação onde um processo sinaliza conclusão
+    # criando ou removendo um arquivo (ex: lockfiles, arquivos de status).
+    #
+    # Modos disponíveis:
+    #   "aparecer"    — retorna 0 quando o arquivo for criado
+    #   "desaparecer" — retorna 0 quando o arquivo for removido
+    #
+    # Retorna 0 se a condição for satisfeita antes do timeout.
+    # Retorna 1 se o timeout for atingido sem que a condição se cumpra.
+    #
+    # Modo de uso:
+    #   # Aguardar até 60s que um processo crie um arquivo de conclusão:
+    #   aguardar_arquivo /tmp/processo.done aparecer 60 || erro "Timeout: processo não concluiu"
+    #
+    #   # Aguardar até 30s que um lockfile seja liberado:
+    #   aguardar_arquivo /var/run/app.lock desaparecer 30 || erro "Timeout: lock não liberado"
+    #
+    #   $1 = caminho do arquivo a monitorar
+    #   $2 = "aparecer" ou "desaparecer"
+    #   $3 = timeout em segundos (padrão: 30)
+    local arquivo="$1"
+    local modo="${2:-aparecer}"
+    local timeout="${3:-30}"
+    local contador=0
+
+    while [ "$contador" -lt "$timeout" ]; do
+        if [ "$modo" = "aparecer" ] && [ -f "$arquivo" ]; then
+            return 0
+        elif [ "$modo" = "desaparecer" ] && [ ! -f "$arquivo" ]; then
+            return 0
+        fi
+        sleep 1
+        (( contador++ ))
+    done
+
+    return 1
+}
+
+================================================================
+ ARQUIVO: lib/inputs.sh
+================================================================
+# shellcheck shell=bash
+# inputs.sh - Funções para coleta e validação de dados inseridos pelo usuário
+#
+# Fornece wrappers interativos para os tipos mais comuns de entrada,
+# com validação automática e suporte a menus navegáveis pelo teclado.
+# Os valores coletados são armazenados em variáveis passadas por nome,
+# seguindo o padrão de passagem por referência do Bash com printf -v.
+#
+# As funções pergunta_ip, pergunta_email, pergunta_url e pergunta_porta
+# delegam a validação para validau.sh, evitando duplicação de lógica.
+#
+# Dependências: validau.sh, sinais.sh
+#
+# Funções disponíveis:
+#   pergunta            <pergunta> <var>                    - Lê uma linha de texto livre
+#   pergunta_sim_nao    <pergunta> <var>                    - Lê resposta s/n, armazena "1" (sim) ou "" (não)
+#   pergunta_senha      <pergunta> <var>                    - Lê senha sem ecoar no terminal
+#   pergunta_numero     <pergunta> <var> [min] [max]        - Lê número inteiro com validação de range
+#   pergunta_ip         <pergunta> <var>                    - Lê e valida endereço IPv4
+#   pergunta_email      <pergunta> <var>                    - Lê e valida endereço de e-mail
+#   pergunta_url        <pergunta> <var>                    - Lê e valida URL (http/https/ftp)
+#   pergunta_porta      <pergunta> <var>                    - Lê e valida número de porta (1-65535)
+#   pergunta_escolha    <pergunta> <var> <op1> <op2> ...    - Menu numerado com select do Bash
+#   menu_interativo     <título>   <var> <op1> <op2> ...    - Menu navegável com setas e Enter/ESC
+#   barra_de_progresso  <atual> <total> [largura] [msg]     - Barra de progresso em linha
+
+
+[[ -n "${_INPUTS_SH_LOADED:-}" ]] && return 0
+readonly _INPUTS_SH_LOADED=1
+
+source "$(dirname "${BASH_SOURCE[0]}")/validau.sh"
+source "$(dirname "${BASH_SOURCE[0]}")/sinais.sh"
+
+function pergunta() {
+    # Modo de uso: pergunta"Pergunta" variavel
+    local pergunta="$1"
+    local __resultvar="$2"
+    
+    local resposta
+    read -r -p "$pergunta: " resposta
+    printf -v "$__resultvar" '%s' "$resposta"
+}
+
+function pergunta_sim_nao() {
+    # Modo de uso: pergunta_sim_nao "Pergunta" variavel
+    local pergunta="$1"
+    local __resultvar="$2"
+
+    local resposta
+    while true; do
+        read -r -p "$pergunta (s/n): " resposta
+        case "$resposta" in
+            [Ss]* ) printf -v "$__resultvar" '%s' "1"; return 0;;
+            [Nn]* ) printf -v "$__resultvar" '%s' ""; return 0;;
+            * ) echo "Por favor, responda com 's' para sim ou 'n' para não.";;
+        esac
+    done
+}
+
+function pergunta_senha() {
+    # Modo de uso: pergunta_senha "Pergunta" variavel
+    local pergunta="$1"
+    local __resultvar="$2"
+    
+    local resposta
+    read -r -s -p "$pergunta: " resposta
+    echo
+    printf -v "$__resultvar" '%s' "$resposta"
+}
+
+function pergunta_numero() {
+    # Lê um número inteiro positivo do terminal com validação de range opcional.
+    # Modo de uso: pergunta_numero "Pergunta" variavel
+    #              pergunta_numero "Pergunta" variavel 1 100   (aceita apenas 1-100)
+    #              pergunta_numero "Pergunta" variavel 0       (aceita apenas >= 0)
+    local pergunta="$1"
+    local __resultvar="$2"
+    local min="${3:-}"
+    local max="${4:-}"
+
+    local hint=""
+    if [ -n "$min" ] && [ -n "$max" ]; then
+        hint=" ($min-$max)"
+    elif [ -n "$min" ]; then
+        hint=" (mínimo: $min)"
+    elif [ -n "$max" ]; then
+        hint=" (máximo: $max)"
+    fi
+
+    local resposta
+    while true; do
+        read -r -p "$pergunta${hint}: " resposta
+        if [[ ! "$resposta" =~ ^[0-9]+$ ]]; then
+            echo "Por favor, insira um número inteiro válido."
+            continue
+        fi
+        if [ -n "$min" ] && [ "$resposta" -lt "$min" ]; then
+            echo "O valor deve ser maior ou igual a $min."
+            continue
+        fi
+        if [ -n "$max" ] && [ "$resposta" -gt "$max" ]; then
+            echo "O valor deve ser menor ou igual a $max."
+            continue
+        fi
+        printf -v "$__resultvar" '%s' "$resposta"
+        return 0
+    done
+}
+
+function pergunta_ip() {
+    # Lê um endereço IPv4 do terminal, repetindo até que um valor válido seja informado.
+    # A validação é delegada para valida_ip de validau.sh.
+    # Modo de uso: pergunta_ip "IP do servidor" ip_var
+    local pergunta="$1"
+    local __resultvar="$2"
+
+    local resposta
+    while true; do
+        read -r -p "$pergunta: " resposta
+        if valida_ip "$resposta"; then
+            printf -v "$__resultvar" '%s' "$resposta"
+            return 0
+        fi
+        echo "Endereço IP inválido. Use o formato A.B.C.D com octetos entre 0 e 255 (ex: 192.168.1.1)."
+    done
+}
+
+function pergunta_email() {
+    # Lê um endereço de e-mail do terminal, repetindo até que um valor válido seja informado.
+    # A validação é delegada para valida_email de validau.sh.
+    # Modo de uso: pergunta_email "E-mail do usuário" email_var
+    local pergunta="$1"
+    local __resultvar="$2"
+
+    local resposta
+    while true; do
+        read -r -p "$pergunta: " resposta
+        if valida_email "$resposta"; then
+            printf -v "$__resultvar" '%s' "$resposta"
+            return 0
+        fi
+        echo "Endereço de e-mail inválido. Use o formato usuario@dominio.com."
+    done
+}
+
+function pergunta_url() {
+    # Lê uma URL do terminal, repetindo até que um valor válido seja informado.
+    # Aceita esquemas http://, https:// e ftp://.
+    # A validação é delegada para valida_url de validau.sh.
+    # Modo de uso: pergunta_url "Endereço do servidor" url_var
+    local pergunta="$1"
+    local __resultvar="$2"
+
+    local resposta
+    while true; do
+        read -r -p "$pergunta: " resposta
+        if valida_url "$resposta"; then
+            printf -v "$__resultvar" '%s' "$resposta"
+            return 0
+        fi
+        echo "URL inválida. Use http://, https:// ou ftp:// seguido do endereço (ex: https://exemplo.com)."
+    done
+}
+
+function pergunta_porta() {
+    # Lê um número de porta TCP/UDP do terminal, repetindo até que um valor válido seja informado.
+    # Aceita valores entre 1 e 65535.
+    # A validação é delegada para valida_porta de validau.sh.
+    # Modo de uso: pergunta_porta "Porta do serviço" porta_var
+    local pergunta="$1"
+    local __resultvar="$2"
+
+    local resposta
+    while true; do
+        read -r -p "$pergunta (1-65535): " resposta
+        if valida_porta "$resposta"; then
+            printf -v "$__resultvar" '%s' "$resposta"
+            return 0
+        fi
+        echo "Porta inválida. Informe um número inteiro entre 1 e 65535."
+    done
+}
+
+function pergunta_escolha() {
+    # Modo de uso: pergunta_escolha "Pergunta" variavel "Opção 1" "Opção 2" ...
+    local pergunta="$1"
+    local __resultvar="$2"
+    shift 2
+    local options=("$@")
+
+    echo "$pergunta"
+    select opt in "${options[@]}"; do
+        if [[ -n "$opt" ]]; then
+            printf -v "$__resultvar" '%s' "$opt"
+            return 0
+        else
+            echo "Opção inválida. Por favor, tente novamente."
+        fi
+    done
+}
+
+function menu_interativo() {
+    # Modo de uso: menu_interativo "Título" variavel "Opção 1" "Opção 2" ...
+    # Retorna 0 e preenche variavel com a opção escolhida, ou retorna 1 se cancelado com ESC.
+    local titulo="$1"
+    local __resultvar="$2"
+    shift 2
+    local opcoes=("$@")
+    local total=${#opcoes[@]}
+    local selecionado=0
+
+    if [ "$total" -eq 0 ]; then
+        echo "Nenhuma opção fornecida."
+        return 1
+    fi
+
+    _menu_renderizar() {
+        local i
+        for i in "${!opcoes[@]}"; do
+            if [ "$i" -eq "$selecionado" ]; then
+                printf "\r\e[K  \e[7m %s \e[0m\n" "${opcoes[$i]}"
+            else
+                printf "\r\e[K    %s\n" "${opcoes[$i]}"
+            fi
+        done
+    }
+
+    tput civis 2>/dev/null
+    registrar_cleanup "tput cnorm 2>/dev/null"
+    echo "$titulo"
+    _menu_renderizar
+
+    local tecla tecla2 tecla3
+    while true; do
+        tput cuu "$total"
+        _menu_renderizar
+
+        IFS= read -r -s -n1 tecla
+
+        if [[ "$tecla" == $'\x1b' ]]; then
+            IFS= read -r -s -n1 -t 0.1 tecla2
+            if [[ "$tecla2" == '[' ]]; then
+                IFS= read -r -s -n1 -t 0.1 tecla3
+                case "$tecla3" in
+                    A) (( selecionado > 0 )) && (( selecionado-- )) ;;
+                    B) (( selecionado < total - 1 )) && (( selecionado++ )) ;;
+                esac
+            else
+                tput cnorm 2>/dev/null
+                cancelar_cleanup "tput cnorm 2>/dev/null"
+                echo
+                unset -f _menu_renderizar
+                return 1
+            fi
+        elif [[ "$tecla" == '' ]]; then
+            tput cnorm
+            cancelar_cleanup "tput cnorm 2>/dev/null"
+            echo
+            printf -v "$__resultvar" '%s' "${opcoes[$selecionado]}"
+            unset -f _menu_renderizar
+            return 0
+        fi
+    done
+}
+
+function barra_de_progresso() {
+    # Exibe uma barra de progresso em linha no terminal, atualizando em tempo real
+    # via retorno de carro (\r) sem adicionar novas linhas.
+    # Ao atingir 100%, imprime uma quebra de linha para liberar o terminal.
+    # Ideal para operações com total de itens conhecido (ex: loops, cópias de arquivos).
+    # Modo de uso: barra_de_progresso <atual> <total> [largura] [mensagem]
+    #   Dentro de um loop:
+    #     for i in $(seq 1 100); do
+    #         barra_de_progresso $i 100 40 "Processando..."
+    #         sleep 0.05
+    #     done
+    local atual="$1"
+    local total="$2"
+    local largura="${3:-40}"
+    local mensagem="${4:-}"
+
+    if [ "$total" -eq 0 ]; then return; fi
+
+    local percentual=$(( atual * 100 / total ))
+    local preenchido=$(( atual * largura / total ))
+    local vazio=$(( largura - preenchido ))
+
+    # Monta a barra: blocos preenchidos (█) e vazios (░)
+    local barra
+    barra=$(printf '%*s' "$preenchido" '' | tr ' ' '█')
+    barra+=$(printf '%*s' "$vazio" '' | tr ' ' '░')
+
+    printf '\r[%s] %3d%% %s' "$barra" "$percentual" "$mensagem"
+
+    # Quebra de linha ao completar
+    if [ "$atual" -eq "$total" ]; then
+        echo
+    fi
+}
+================================================================
+ ARQUIVO: lib/logu.sh
+================================================================
+# shellcheck shell=bash
+# logu.sh - Funções para logging estruturado em scripts de automação
+#
+# Grava mensagens com timestamp, nível e opcionalmente em arquivo.
+# Suporta quatro níveis de log: DEBUG, INFO, WARN e ERRO.
+# O nível mínimo pode ser configurado para filtrar mensagens menos relevantes.
+#
+# Quando DRYRUN="1", apenas log_rodar é suprimida (a rotação não ocorre).
+# As funções de escrita (log_info, log_erro, etc.) continuam funcionando
+# normalmente em dry-run, pois o log serve como trilha de auditoria do que
+# seria executado.
+#
+# Dependências: nenhuma
+#
+# Funções disponíveis:
+#   log_set_arquivo  <caminho>          - Define o arquivo de destino dos logs
+#   log_set_nivel    <nivel>            - Define o nível mínimo (0=DEBUG..3=ERRO)
+#   log_debug        <mensagem>         - Registra mensagem de nível DEBUG
+#   log_info         <mensagem>         - Registra mensagem de nível INFO
+#   log_warn         <mensagem>         - Registra mensagem de nível WARN
+#   log_erro         <mensagem>         - Registra mensagem de nível ERRO
+#   log_rodar                <arquivo> [limite]       - Rotaciona o log ao atingir o tamanho limite
+#   log_escrever_apenas_arquivo <nivel> <str> <msg>  - Grava no arquivo sem output no terminal (API pública)
+
+
+[[ -n "${_LOGU_SH_LOADED:-}" ]] && return 0
+readonly _LOGU_SH_LOADED=1
+
+# Caminho do arquivo de log (vazio = apenas saída no terminal)
+_LOG_ARQUIVO=""
+
+# Nível mínimo de log exibido/gravado (0=DEBUG, 1=INFO, 2=WARN, 3=ERRO)
+# IMPORTANTE: os valores de nível são NUMÉRICOS inteiros (0-3).
+# Não use strings ("DEBUG", "true") — as comparações usam -lt/-ge.
+_LOG_NIVEL_MINIMO=0
+
+# Constantes de nível
+readonly _LOG_DEBUG=0
+readonly _LOG_INFO=1
+readonly _LOG_WARN=2
+readonly _LOG_ERRO=3
+
+function log_set_arquivo() {
+    # Define o arquivo de destino para gravação dos logs.
+    # Se o diretório não existir, tenta criá-lo.
+    # Modo de uso: log_set_arquivo /var/log/meu_script.log
+    local arquivo="$1"
+    local diretorio
+    diretorio=$(dirname "$arquivo")
+
+    if [ ! -d "$diretorio" ]; then
+        mkdir -p "$diretorio" || { echo "ERRO: Não foi possível criar o diretório de log: $diretorio" >&2; return 1; }
+    fi
+
+    _LOG_ARQUIVO="$arquivo"
+}
+
+function log_set_nivel() {
+    # Define o nível mínimo de log a ser exibido e gravado.
+    # Mensagens abaixo desse nível são silenciadas.
+    # Modo de uso: log_set_nivel 1   (1=INFO, ignora DEBUG)
+    _LOG_NIVEL_MINIMO="$1"
+}
+
+function _log_escrever() {
+    # Função interna: formata e escreve uma entrada de log.
+    # Parâmetros: <nivel_numerico> <nivel_string> <mensagem> [apenas_arquivo]
+    # O parâmetro opcional apenas_arquivo=1 suprime a saída no terminal,
+    # gravando somente no arquivo. Usado internamente por alerta.sh para evitar
+    # duplicação de output (terminal já é tratado pelas funções coloridas).
+    local nivel_num="$1"
+    local nivel_str="$2"
+    local mensagem="$3"
+    local apenas_arquivo="${4:-0}"
+
+    [ "$nivel_num" -lt "$_LOG_NIVEL_MINIMO" ] && return 0
+
+    local timestamp
+    timestamp=$(date '+%Y-%m-%d %H:%M:%S')
+    local linha="[$timestamp] [$nivel_str] $mensagem"
+
+    if [ "$apenas_arquivo" -eq 0 ]; then
+        if [ "$nivel_num" -ge "$_LOG_ERRO" ]; then
+            echo "$linha" >&2
+        else
+            echo "$linha"
+        fi
+    fi
+
+    if [ -n "$_LOG_ARQUIVO" ]; then
+        echo "$linha" >> "$_LOG_ARQUIVO"
+    fi
+}
+
+function log_debug() {
+    # Registra uma mensagem de nível DEBUG.
+    # Útil para informações detalhadas de diagnóstico durante desenvolvimento.
+    # Modo de uso: log_debug "variavel x = $x"
+    _log_escrever "$_LOG_DEBUG" "DEBUG" "$1"
+}
+
+function log_info() {
+    # Registra uma mensagem de nível INFO.
+    # Usado para confirmar que o script está operando normalmente.
+    # Modo de uso: log_info "Serviço iniciado com sucesso"
+    _log_escrever "$_LOG_INFO" "INFO " "$1"
+}
+
+function log_warn() {
+    # Registra uma mensagem de nível WARN.
+    # Indica uma situação inesperada que não impede a execução.
+    # Modo de uso: log_warn "Arquivo de configuração não encontrado, usando padrão"
+    _log_escrever "$_LOG_WARN" "WARN " "$1"
+}
+
+function log_erro() {
+    # Registra uma mensagem de nível ERRO.
+    # Indica uma falha que pode impedir a execução correta do script.
+    # Modo de uso: log_erro "Falha ao conectar ao banco de dados"
+    _log_escrever "$_LOG_ERRO" "ERRO " "$1"
+}
+
+function log_escrever_apenas_arquivo() {
+    # Grava uma mensagem diretamente no arquivo de log sem exibir no terminal.
+    # API pública que permite a módulos externos (como alerta.sh) integrarem-se
+    # com o sistema de log sem acessar a função interna _log_escrever.
+    # Não faz nada se nenhum arquivo de log estiver configurado.
+    # Modo de uso: log_escrever_apenas_arquivo $LOG_WARN "WARN " "mensagem"
+    _log_escrever "$1" "$2" "$3" 1
+}
+
+function log_rodar() {
+    # Rotaciona o arquivo de log quando seu tamanho ultrapassa o limite definido.
+    # Copia o conteúdo atual para um arquivo com timestamp e zera o arquivo original
+    # via truncate, preservando o inode. Processos com o descritor já aberto
+    # continuam escrevendo no arquivo ativo sem perda de dados.
+    # Aceita sufixos K (kilobytes), M (megabytes) e G (gigabytes).
+    # Modo de uso: log_rodar /var/log/app.log 10M
+    local arquivo="$1"
+    local tamanho_max="${2:-10M}"
+
+    if [ ! -f "$arquivo" ]; then
+        echo "ERRO: Arquivo de log não encontrado: $arquivo" >&2
+        return 1
+    fi
+
+    local tamanho_atual
+    tamanho_atual=$(stat -c "%s" "$arquivo")
+
+    local limite
+    case "$tamanho_max" in
+        *K) limite=$(( ${tamanho_max%K} * 1024 )) ;;
+        *M) limite=$(( ${tamanho_max%M} * 1024 * 1024 )) ;;
+        *G) limite=$(( ${tamanho_max%G} * 1024 * 1024 * 1024 )) ;;
+        *)  limite="$tamanho_max" ;;
+    esac
+
+    if [ "$tamanho_atual" -ge "$limite" ]; then
+        local timestamp
+        timestamp=$(date '+%Y%m%d_%H%M%S')
+        local arquivo_rotacionado="${arquivo}.${timestamp}"
+        if [ "${DRYRUN:-}" = "1" ]; then
+            echo "[DRY-RUN] log_rodar: '$arquivo' → '$arquivo_rotacionado' (truncate suprimido)" >&2
+            return 0
+        fi
+        cp "$arquivo" "$arquivo_rotacionado" && truncate -s 0 "$arquivo"
+        echo "Log rotacionado: $arquivo_rotacionado"
+    fi
+}
+
+================================================================
+ ARQUIVO: lib/mockfiles.sh
+================================================================
+# shellcheck shell=bash
+# mockfiles.sh - Funções para criação de arquivos fictícios para testes
+#
+# Fornece três métodos diferentes para gerar arquivos com dados aleatórios,
+# úteis para testar scripts que manipulam arquivos sem depender de dados reais.
+#
+# Métodos disponíveis:
+#   dd      - Lê bytes aleatórios de /dev/urandom em blocos de 1KB (dado real)
+#   head    - Captura N bytes diretamente de /dev/urandom (dado real)
+#   truncate - Cria arquivo do tamanho informado com conteúdo nulo (dado fictício)
+#
+# Nota: dd e head criam arquivos com dados verdadeiramente aleatórios.
+#       truncate cria arquivos esparsos, muito mais rápido mas sem dados reais.
+#
+# Quando DRYRUN="1", nenhum arquivo é criado: as funções imprimem no stderr
+# o que seria feito e retornam 0.
+#
+# Dependências: nenhuma
+#
+# Funções disponíveis:
+#   criar_arquivo_aleatorio          <nome> <tamanho_kb> - Cria arquivo via dd
+#   criar_arquivo_aleatorio_head     <nome> <tamanho_kb> - Cria arquivo via head
+#   criar_arquivo_aleatorio_truncate <nome> <tamanho_kb> - Cria arquivo via truncate
+
+
+[[ -n "${_MOCKFILES_SH_LOADED:-}" ]] && return 0
+readonly _MOCKFILES_SH_LOADED=1
+
+function criar_arquivo_aleatorio() {
+    # Cria um arquivo com dados aleatórios reais usando dd e /dev/urandom.
+    # O arquivo terá exatamente <tamanho_kb> kilobytes de dados aleatórios.
+    # Método mais lento, mas garante conteúdo aleatório em cada byte.
+    # Em dry-run: imprime o que seria criado sem tocar no disco.
+    # Modo de uso: criar_arquivo_aleatorio arquivo_teste.bin 512
+    local nome_arquivo="$1"
+    local tamanho="$2"
+    if [[ -n "$nome_arquivo" && -n "$tamanho" ]]; then
+        if [ "${DRYRUN:-}" = "1" ]; then
+            echo "[DRY-RUN] criar_arquivo_aleatorio: dd if=/dev/urandom of='$nome_arquivo' bs=1K count=$tamanho" >&2
+            return 0
+        fi
+        dd if=/dev/urandom of="$nome_arquivo" bs=1K count="$tamanho" status=none
+    else
+        echo "Uso: criar_arquivo_aleatorio NOME_DO_ARQUIVO TAMANHO_EM_KB"
+        return 1
+    fi
+}
+
+function criar_arquivo_aleatorio_head() {
+    # Cria um arquivo com dados aleatórios reais usando head e /dev/urandom.
+    # Alternativa ao dd para sistemas onde head é mais eficiente.
+    # O arquivo terá exatamente <tamanho_kb> kilobytes de dados aleatórios.
+    # Em dry-run: imprime o que seria criado sem tocar no disco.
+    # Modo de uso: criar_arquivo_aleatorio_head arquivo_teste.bin 512
+    local nome_arquivo="$1"
+    local tamanho="$2"
+    if [[ -n "$nome_arquivo" && -n "$tamanho" ]]; then
+        if [ "${DRYRUN:-}" = "1" ]; then
+            echo "[DRY-RUN] criar_arquivo_aleatorio_head: head -c $((tamanho * 1024)) /dev/urandom > '$nome_arquivo'" >&2
+            return 0
+        fi
+        head -c $((tamanho * 1024)) /dev/urandom > "$nome_arquivo"
+    else
+        echo "Uso: criar_arquivo_aleatorio_head NOME_DO_ARQUIVO TAMANHO_EM_KB"
+        return 1
+    fi
+}
+
+function criar_arquivo_aleatorio_truncate() {
+    # Cria um arquivo esparso do tamanho especificado usando truncate.
+    # O arquivo é criado instantaneamente independente do tamanho, pois
+    # o conteúdo é nulo (zeros) e não é fisicamente alocado em disco.
+    # Ideal para testes de tamanho de arquivo sem necessidade de dados reais.
+    # Em dry-run: imprime o que seria criado sem tocar no disco.
+    # Modo de uso: criar_arquivo_aleatorio_truncate arquivo_teste.bin 1024
+    local nome_arquivo="$1"
+    local tamanho="$2"
+    if [[ -n "$nome_arquivo" && -n "$tamanho" ]]; then
+        if [ "${DRYRUN:-}" = "1" ]; then
+            echo "[DRY-RUN] criar_arquivo_aleatorio_truncate: truncate -s $((tamanho * 1024)) '$nome_arquivo'" >&2
+            return 0
+        fi
+        truncate -s $((tamanho * 1024)) "$nome_arquivo"
+    else
+        echo "Uso: criar_arquivo_aleatorio_truncate NOME_DO_ARQUIVO TAMANHO_EM_KB"
+        return 1
+    fi
+}
+
+================================================================
+ ARQUIVO: lib/pkgu.sh
+================================================================
+# shellcheck shell=bash
+# pkgu.sh - Abstração para gerenciadores de pacotes de diferentes distribuições Linux
+#
+# Detecta automaticamente o gerenciador de pacotes da distribuição em uso
+# e executa a operação solicitada com o comando adequado.
+# Suporta: apt (Debian/Ubuntu), dnf (Fedora), pacman (Arch), yum (Red Hat),
+#          zypper (SuSE), emerge (Gentoo) e apk (Alpine).
+#
+# Quando DRYRUN="1", nenhuma operação de instalação, remoção ou atualização
+# é executada: as funções imprimem no stderr o que seria feito e retornam 0.
+# procura_pacote não é afetada (operação somente-leitura).
+#
+# Dependências: distu.sh, dryrun.sh
+#
+# Funções disponíveis:
+#   atualizar_pacote          - Atualiza todos os pacotes do sistema
+#   instala_pacote          <nome> [silencioso] - Instala um pacote
+#   instala_pacote_quieto   <nome>              - Instala um pacote sem saída no terminal
+#   remove_pacote           <nome>              - Remove um pacote
+#   procura_pacote           <nome>              - Busca pacotes pelo nome
+#   atualiza_pacote           <nome>              - Atualiza um pacote específico
+
+
+[[ -n "${_PKGU_SH_LOADED:-}" ]] && return 0
+readonly _PKGU_SH_LOADED=1
+
+source "$(dirname "${BASH_SOURCE[0]}")/distu.sh"
+source "$(dirname "${BASH_SOURCE[0]}")/dryrun.sh"
+
+function atualizar_pacote() {
+    # Atualiza a lista de pacotes e instala as atualizações disponíveis
+    # usando o gerenciador de pacotes da distribuição detectada.
+    # Requer privilégios de root.
+    # Modo de uso: atualizar_pacote
+    if [ "${DRYRUN:-}" = "1" ]; then
+        echo "[DRY-RUN] pkgu: atualizar todos os pacotes do sistema" >&2
+        return 0
+    fi
+    if dist_e_debian || dist_e_ubuntu; then
+        apt update && apt upgrade -y
+    elif dist_e_fedora; then
+        dnf update -y
+    elif dist_e_arch; then
+        pacman -Syu --noconfirm
+    elif dist_e_redhat; then
+        yum update -y
+    elif dist_e_suse; then
+        zypper update -y
+    elif dist_e_gentoo; then
+        emerge --sync && emerge --update --deep --with-bdeps=y @world
+    elif dist_e_alpine; then
+        apk update && apk upgrade
+    else
+        echo "Distribuição não suportada para atualização de pacotes."
+    fi
+}
+
+function instala_pacote() {
+    # Instala um pacote usando o gerenciador de pacotes da distribuição detectada.
+    # Se o segundo parâmetro for fornecido (qualquer valor), a saída é redirecionada
+    # para /dev/null, instalando o pacote de forma silenciosa.
+    # Requer privilégios de root.
+    # Modo de uso: instala_pacote "curl"
+    #              instala_pacote "curl" 1   (instalação silenciosa)
+    local pkg_name="$1"
+    local silent="${2:-}"
+
+    if [ "${DRYRUN:-}" = "1" ]; then
+        echo "[DRY-RUN] pkgu: instalar pacote '$pkg_name'" >&2
+        return 0
+    fi
+
+    _pkg_run() {
+        if [ -n "$silent" ]; then
+            "$@" &>/dev/null
+        else
+            "$@"
+        fi
+    }
+
+    if dist_e_debian || dist_e_ubuntu; then
+        _pkg_run apt install -y "$pkg_name"
+    elif dist_e_fedora; then
+        _pkg_run dnf install -y "$pkg_name"
+    elif dist_e_arch; then
+        _pkg_run pacman -S --noconfirm "$pkg_name"
+    elif dist_e_redhat; then
+        _pkg_run yum install -y "$pkg_name"
+    elif dist_e_suse; then
+        _pkg_run zypper install -y "$pkg_name"
+    elif dist_e_gentoo; then
+        _pkg_run emerge "$pkg_name"
+    elif dist_e_alpine; then
+        _pkg_run apk add "$pkg_name"
+    else
+        echo "Distribuição não suportada para instalação de pacotes."
+        return 1
+    fi
+
+    unset -f _pkg_run
+}
+
+function instala_pacote_quieto() {
+    # Instala um pacote de forma silenciosa, sem exibir saída no terminal.
+    # Wrapper conveniente para instala_pacote com o modo silencioso ativado.
+    # Requer privilégios de root.
+    # Modo de uso: instala_pacote_quieto "curl"
+    local package_name="$1"
+    instala_pacote "$package_name" 1
+}
+
+function remove_pacote() {
+    # Remove um pacote instalado usando o gerenciador de pacotes da distribuição detectada.
+    # Requer privilégios de root.
+    # Modo de uso: remove_pacote "curl"
+    if [ "${DRYRUN:-}" = "1" ]; then
+        echo "[DRY-RUN] pkgu: remover pacote '$1'" >&2
+        return 0
+    fi
+    if dist_e_debian || dist_e_ubuntu; then
+        apt remove -y "$1"
+    elif dist_e_fedora; then
+        dnf remove -y "$1"
+    elif dist_e_arch; then
+        pacman -R --noconfirm "$1"
+    elif dist_e_redhat; then
+        yum remove -y "$1"
+    elif dist_e_suse; then
+        zypper remove -y "$1"
+    elif dist_e_gentoo; then
+        emerge --unmerge "$1"
+    elif dist_e_alpine; then
+        apk del "$1"
+    else
+        echo "Distribuição não suportada para remoção de pacotes."
+    fi
+}
+
+function procura_pacote() {
+    # Busca pacotes disponíveis pelo nome ou descrição no repositório da distribuição.
+    # Modo de uso: procura_pacote "nginx"
+    if dist_e_debian || dist_e_ubuntu; then
+        apt search "$1"
+    elif dist_e_fedora; then
+        dnf search "$1"
+    elif dist_e_arch; then
+        pacman -Ss "$1"
+    elif dist_e_redhat; then
+        yum search "$1"
+    elif dist_e_suse; then
+        zypper search "$1"
+    elif dist_e_gentoo; then
+        emerge --search "$1"
+    elif dist_e_alpine; then
+        apk search "$1"
+    else
+        echo "Distribuição não suportada para busca de pacotes."
+    fi
+}
+
+function atualiza_pacote() {
+    # Atualiza um pacote específico para a versão mais recente disponível
+    # no repositório da distribuição detectada.
+    # Requer privilégios de root.
+    # Modo de uso: atualiza_pacote "nginx"
+    if [ "${DRYRUN:-}" = "1" ]; then
+        echo "[DRY-RUN] pkgu: atualizar pacote '$1'" >&2
+        return 0
+    fi
+    if dist_e_debian || dist_e_ubuntu; then
+        apt install --only-upgrade -y "$1"
+    elif dist_e_fedora; then
+        dnf update -y "$1"
+    elif dist_e_arch; then
+        pacman -S --noconfirm --needed "$1"
+    elif dist_e_redhat; then
+        yum update -y "$1"
+    elif dist_e_suse; then
+        zypper update -y "$1"
+    elif dist_e_gentoo; then
+        emerge --update --deep --with-bdeps=y "$1"
+    elif dist_e_alpine; then
+        apk upgrade "$1"
+    else
+        echo "Distribuição não suportada para atualização de pacotes."
+    fi
+}
+
+================================================================
+ ARQUIVO: lib/procesu.sh
+================================================================
+# shellcheck shell=bash
+# procesu.sh - Funções para gerenciamento de processos e controle de execução simultânea
+#
+# Fornece utilitários para verificar, encerrar e aguardar processos,
+# além de mecanismo de lock para evitar execuções paralelas de um mesmo script.
+#
+# Quando DRYRUN="1":
+#   matar_processo  - imprime o que seria feito sem enviar sinais
+#   lock_adquirir   - simula aquisição bem-sucedida sem criar diretório/arquivo
+#   lock_liberar    - simula liberação sem deletar nada
+#
+# Dependências: systemu.sh, sinais.sh, dryrun.sh
+#
+# Funções disponíveis:
+#   e_processo_rodando        <nome>                  - Verifica se um processo está ativo pelo nome
+#   matar_processo            <nome> [timeout]        - Encerra processo com fallback SIGTERM → SIGKILL
+#   lock_adquirir             <lock>                  - Cria lock para execução exclusiva
+#   lock_liberar              <lock>                  - Remove o arquivo de lock
+#   lock_adquirir_com_cleanup <lock>                  - Adquire lock e registra liberação automática
+#   aguardar_processo         <nome_ou_pid> [timeout] - Espera um processo terminar
+
+
+[[ -n "${_PROCESU_SH_LOADED:-}" ]] && return 0
+readonly _PROCESU_SH_LOADED=1
+
+source "$(dirname "${BASH_SOURCE[0]}")/systemu.sh"
+source "$(dirname "${BASH_SOURCE[0]}")/sinais.sh"
+source "$(dirname "${BASH_SOURCE[0]}")/dryrun.sh"
+
+function e_processo_rodando() {
+    # Verifica se um processo está em execução pelo nome exato.
+    # Retorna 0 se estiver rodando, 1 caso contrário.
+    # Modo de uso: e_processo_rodando "nginx" && echo "nginx ativo"
+    pgrep -x "$1" > /dev/null 2>&1
+}
+
+function matar_processo() {
+    # Encerra todos os processos com o nome informado.
+    # Envia SIGTERM primeiro e aguarda até <timeout> segundos.
+    # Se o processo não terminar, envia SIGKILL.
+    # Modo de uso: matar_processo "meu_script" 10
+    local nome="$1"
+    local timeout="${2:-5}"
+
+    local pids
+    pids=$(pgrep -x "$nome" 2>/dev/null)
+
+    if [ -z "$pids" ]; then
+        return 1
+    fi
+
+    if [ "${DRYRUN:-}" = "1" ]; then
+        echo "[DRY-RUN] matar_processo: SIGTERM/SIGKILL → '$nome' (PIDs: $pids)" >&2
+        return 0
+    fi
+
+    # Envia SIGTERM para encerramento gracioso
+    kill "$pids" 2>/dev/null
+
+    local contador=0
+    while kill -0 "$pids" 2>/dev/null && [ "$contador" -lt "$timeout" ]; do
+        sleep 1
+        (( contador++ ))
+    done
+
+    # Se ainda estiver rodando após o timeout, força com SIGKILL
+    if kill -0 "$pids" 2>/dev/null; then
+        kill -9 "$pids" 2>/dev/null
+    fi
+
+    return 0
+}
+
+function lock_adquirir() {
+    # Adquire um lock de execução exclusiva usando um diretório como sentinela.
+    # mkdir é uma operação atômica no kernel, eliminando a race condition entre
+    # verificar e criar que existe com arquivos comuns.
+    # O PID do processo dono é gravado em <lock>/pid para detecção de lock fantasma.
+    #
+    # Retorna 0 se o lock foi adquirido.
+    # Retorna 1 se outro processo válido já possui o lock.
+    #
+    # Se o lock existir mas o processo dono não existir mais (crash, kill -9, etc.),
+    # o lock fantasma é removido automaticamente e um novo lock é adquirido.
+    #
+    # Modo de uso:
+    #   lock_adquirir /tmp/meu_script.lock || { erro "Já existe uma instância rodando."; exit 1; }
+    #   trap "lock_liberar /tmp/meu_script.lock" EXIT
+    local lock="$1"
+
+    # Se o diretório de lock já existe, verifica se o dono ainda está vivo
+    if [ -d "$lock" ]; then
+        local pid_lock
+        pid_lock=$(cat "$lock/pid" 2>/dev/null)
+
+        if kill -0 "$pid_lock" 2>/dev/null; then
+            # Processo dono ainda está em execução: lock válido
+            return 1
+        fi
+
+        # Lock fantasma: processo dono não existe mais, remove o lock obsoleto
+        dryrun_exec "lock_adquirir: rm -rf '$lock' (lock fantasma)" rm -rf "$lock"
+    fi
+
+    if [ "${DRYRUN:-}" = "1" ]; then
+        echo "[DRY-RUN] lock_adquirir: simular aquisição de '$lock'" >&2
+        return 0
+    fi
+
+    # mkdir é atômico: apenas um processo consegue criar o diretório com sucesso
+    # Se dois processos chegarem aqui simultaneamente, apenas um vence
+    if mkdir "$lock" 2>/dev/null; then
+        echo $$ > "$lock/pid"
+        return 0
+    fi
+
+    # Outro processo ganhou a corrida no mkdir
+    return 1
+}
+
+function lock_liberar() {
+    # Remove o lock, liberando a execução exclusiva.
+    # Verifica se o processo atual é o dono do lock antes de remover,
+    # evitando que um processo libere acidentalmente o lock de outro.
+    # Retorna 0 se o lock foi liberado, 1 se o processo atual não é o dono.
+    # Em dry-run: simula liberação sem deletar nada (lock nunca foi criado).
+    #
+    # Modo de uso: lock_liberar /tmp/meu_script.lock
+    # Uso recomendado com trap: trap "lock_liberar /tmp/meu_script.lock" EXIT
+    local lock="$1"
+
+    if [ "${DRYRUN:-}" = "1" ]; then
+        echo "[DRY-RUN] lock_liberar: simular liberação de '$lock'" >&2
+        return 0
+    fi
+
+    local pid_lock
+    pid_lock=$(cat "$lock/pid" 2>/dev/null)
+
+    if [ "$pid_lock" != "$$" ]; then
+        return 1
+    fi
+
+    rm -rf "$lock"
+    return 0
+}
+
+function lock_adquirir_com_cleanup() {
+    # Adquire o lock e registra automaticamente sua liberação no stack de cleanup
+    # de sinais.sh. Garante que o lock será removido mesmo em caso de crash,
+    # Ctrl+C ou qualquer outro sinal de término.
+    #
+    # Equivale a:
+    #   lock_adquirir "$lock" && registrar_cleanup "lock_liberar $lock"
+    #
+    # Retorna 0 se o lock foi adquirido, 1 caso contrário.
+    # Modo de uso:
+    #   lock_adquirir_com_cleanup /tmp/app.lock || { erro "Já existe uma instância rodando."; exit 1; }
+    local lock="$1"
+
+    lock_adquirir "$lock" || return 1
+    registrar_cleanup "lock_liberar $lock"
+    return 0
+}
+
+function aguardar_processo() {
+    # Espera um processo terminar, verificando a cada segundo até o timeout.
+    # Aceita tanto o nome do processo quanto seu PID como identificador.
+    # Retorna 0 se o processo terminou, 1 se o timeout foi atingido.
+    # Modo de uso: aguardar_processo "rsync" 60
+    #              aguardar_processo 1234 30
+    local alvo="$1"
+    local timeout="${2:-30}"
+    local contador=0
+
+    while [ "$contador" -lt "$timeout" ]; do
+        if [[ "$alvo" =~ ^[0-9]+$ ]]; then
+            # Identificador é um PID numérico
+            kill -0 "$alvo" 2>/dev/null || return 0
+        else
+            # Identificador é o nome do processo
+            pgrep -x "$alvo" > /dev/null 2>&1 || return 0
+        fi
+        sleep 1
+        (( contador++ ))
+    done
+
+    return 1
+}
+
+================================================================
+ ARQUIVO: lib/resourcesu.sh
+================================================================
+# shellcheck shell=bash
+# resourcesu.sh - Funções para monitoramento de recursos do sistema
+#
+# Fornece funções para consultar informações sobre CPU, memória e disco,
+# além de listar as interfaces de rede disponíveis no sistema.
+# Depende de arquivos do sistema de arquivos virtual /proc (Linux).
+#
+# Todas as funções numéricas retornam números puros sem unidade ou símbolo,
+# deixando a formatação e interpretação a cargo do chamador.
+#   - Funções memoria_*  : retornam valor inteiro em kB
+#   - Funções uso_*      : retornam percentual inteiro (0-100)
+#
+# Dependências: nenhuma
+#
+# Funções disponíveis:
+#   modelo_de_cpu            - Retorna o modelo do processador (string)
+#   memoria_total            - Retorna a memória RAM total em kB
+#   memoria_disponivel       - Retorna a memória RAM disponível em kB
+#   memoria_usada            - Retorna a memória RAM em uso em kB
+#   uso_do_disco  [caminho]  - Retorna o percentual de uso do disco (0-100)
+#   uso_da_cpu               - Retorna o percentual de uso da CPU (0-100)
+#   uso_da_memoria           - Retorna o percentual de uso da memória (0-100)
+#   lista_interfaces_de_rede - Lista as interfaces de rede disponíveis
+
+
+[[ -n "${_RESOURCESU_SH_LOADED:-}" ]] && return 0
+readonly _RESOURCESU_SH_LOADED=1
+
+function modelo_de_cpu() {
+    # Retorna o modelo do processador lendo /proc/cpuinfo.
+    # Em sistemas sem /proc/cpuinfo (ex: macOS), retorna "Desconhecido".
+    # Modo de uso: echo "CPU: $(modelo_de_cpu)"
+    if [ -f /proc/cpuinfo ]; then
+        grep "model name" /proc/cpuinfo | head -n 1 | cut -d: -f2 | sed 's/^[ \t]*//'
+    else
+        echo "Desconhecido"
+    fi
+}
+
+function memoria_total() {
+    # Retorna a memória RAM total instalada no sistema como inteiro em kB.
+    # Modo de uso: total=$(memoria_total)
+    #              echo "RAM total: $((total / 1024)) MB"
+    if [ -f /proc/meminfo ]; then
+        awk '/MemTotal/{print $2}' /proc/meminfo
+    else
+        echo "0"
+    fi
+}
+
+function memoria_disponivel() {
+    # Retorna a memória RAM disponível para novos processos como inteiro em kB.
+    # Usa MemAvailable (mais precisa que MemFree, inclui cache liberável).
+    # Modo de uso: disp=$(memoria_disponivel)
+    #              echo "Disponível: $((disp / 1024)) MB"
+    if [ -f /proc/meminfo ]; then
+        awk '/MemAvailable/{print $2}' /proc/meminfo
+    else
+        echo "0"
+    fi
+}
+
+function memoria_usada() {
+    # Retorna a memória RAM em uso como inteiro em kB,
+    # calculada como MemTotal - MemAvailable.
+    # Modo de uso: usada=$(memoria_usada)
+    #              echo "Em uso: $((usada / 1024)) MB"
+    if [ -f /proc/meminfo ]; then
+        awk '/MemTotal/{total=$2} /MemAvailable/{avail=$2} END{print total-avail}' /proc/meminfo
+    else
+        echo "0"
+    fi
+}
+
+function uso_do_disco() {
+    # Retorna o percentual de uso do disco como inteiro (0-100).
+    # Se um caminho for fornecido, usa o sistema de arquivos daquele caminho.
+    # Caso contrário, usa o sistema de arquivos raiz (/).
+    # Modo de uso: uso=$(uso_do_disco)
+    #              uso=$(uso_do_disco /var/log)
+    #              [ "$uso" -gt 90 ] && erro "Disco quase cheio: ${uso}%"
+    df "${1:-/}" | awk 'NR==2{gsub(/%/,"",$5); print $5}'
+}
+
+function uso_da_cpu() {
+    # Retorna o percentual de uso da CPU como inteiro (0-100).
+    # Calculado como 100 menos o tempo ocioso reportado pelo top.
+    # Modo de uso: cpu=$(uso_da_cpu)
+    #              [ "$cpu" -gt 80 ] && alerta "CPU acima de 80%: ${cpu}%"
+    top -bn1 | grep "Cpu(s)" | sed "s/.*, *\([0-9.]*\)%* id.*/\1/" | awk '{printf "%d", 100 - $1}'
+}
+
+function uso_da_memoria() {
+    # Retorna o percentual de uso da memória RAM como inteiro (0-100).
+    # Modo de uso: mem=$(uso_da_memoria)
+    #              [ "$mem" -gt 90 ] && erro "Memória crítica: ${mem}%"
+    free -m | awk 'NR==2{printf "%d", $3*100/$2}'
+}
+
+function lista_interfaces_de_rede() {
+    # Lista os nomes de todas as interfaces de rede disponíveis no sistema,
+    # uma por linha, usando o comando ip.
+    # Modo de uso: lista_interfaces_de_rede
+    ip -o link show | awk -F': ' '{print $2}'
+}
+
+================================================================
+ ARQUIVO: lib/retryu.sh
+================================================================
+# shellcheck shell=bash
+# retryu.sh - Funções para execução resiliente de comandos com retry automático
+#
+# Útil para operações instáveis como chamadas de rede, acesso a serviços externos
+# ou qualquer comando que possa falhar transitoriamente.
+#
+# Dependências: spinner.sh
+#
+# Funções disponíveis:
+#   tentar                 <tentativas> <delay> <comando...> - Retry com delay fixo
+#   tentar_com_backoff     <tentativas> <delay> <comando...> - Retry com espera exponencial
+#   tentar_spinner         <tentativas> <delay> <comando...> - Retry com delay fixo e spinner
+#   tentar_backoff_spinner <tentativas> <delay> <comando...> - Retry com backoff exponencial e spinner
+
+
+[[ -n "${_RETRYU_SH_LOADED:-}" ]] && return 0
+readonly _RETRYU_SH_LOADED=1
+
+source "$(dirname "${BASH_SOURCE[0]}")/spinner.sh"
+
+function tentar() {
+    # Executa um comando até N vezes, aguardando um intervalo fixo entre tentativas.
+    # Retorna 0 na primeira execução bem-sucedida.
+    # Retorna 1 se todas as tentativas falharem.
+    # Modo de uso: tentar 3 5 curl -s https://exemplo.com
+    #   $1 = número máximo de tentativas
+    #   $2 = segundos de espera entre tentativas
+    #   $@ = comando a executar
+    local tentativas="$1"
+    local delay="$2"
+    shift 2
+
+    local i=1
+    while [ "$i" -le "$tentativas" ]; do
+        "$@" && return 0
+        echo "Tentativa $i/$tentativas falhou. Aguardando ${delay}s..." >&2
+        sleep "$delay"
+        (( i++ ))
+    done
+
+    echo "Todas as $tentativas tentativas falharam: $*" >&2
+    return 1
+}
+
+function tentar_com_backoff() {
+    # Executa um comando até N vezes com espera exponencial entre tentativas.
+    # A cada falha, o tempo de espera dobra: delay, 2*delay, 4*delay, etc.
+    # Ideal para evitar sobrecarga em serviços que estão se recuperando.
+    # Retorna 0 na primeira execução bem-sucedida.
+    # Retorna 1 se todas as tentativas falharem.
+    # Modo de uso: tentar_com_backoff 4 2 wget -q https://exemplo.com
+    #   $1 = número máximo de tentativas
+    #   $2 = delay inicial em segundos (dobra a cada falha)
+    #   $@ = comando a executar
+    local tentativas="$1"
+    local delay="$2"
+    shift 2
+
+    local i=1
+    while [ "$i" -le "$tentativas" ]; do
+        "$@" && return 0
+        echo "Tentativa $i/$tentativas falhou. Aguardando ${delay}s (backoff exponencial)..." >&2
+        sleep "$delay"
+        delay=$(( delay * 2 ))
+        (( i++ ))
+    done
+
+    echo "Todas as $tentativas tentativas falharam: $*" >&2
+    return 1
+}
+
+function tentar_spinner() {
+    # Executa um comando até N vezes com delay fixo entre tentativas,
+    # exibindo um spinner durante a execução do comando e durante a espera.
+    # A saída do comando é descartada para não quebrar o layout do spinner.
+    # Retorna 0 na primeira execução bem-sucedida, 1 se todas as tentativas falharem.
+    # Modo de uso: tentar_spinner 3 5 curl -s https://exemplo.com
+    #   $1 = número máximo de tentativas
+    #   $2 = segundos de espera entre tentativas
+    #   $@ = comando a executar
+    local tentativas="$1"
+    local delay="$2"
+    shift 2
+    local frames="⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏"
+    local len=${#frames} f pid status i=1
+
+    tput civis 2>/dev/null
+    _SPINNER_CURSOR_OCULTO=1
+    while [ "$i" -le "$tentativas" ]; do
+        "$@" &>/dev/null &
+        local pid=$!; f=0
+        while kill -0 "$pid" 2>/dev/null; do
+            printf '\r[%s] Tentativa %s/%s: %s' "${frames:f:1}" "$i" "$tentativas" "$*"
+            f=$(( (f + 1) % len ))
+            sleep 0.1
+        done
+        wait "$pid"; status=$?
+
+        if [ "$status" -eq 0 ]; then
+            local pid=$!; f=0
+            printf '\r[✓] Concluído na tentativa %s/%s.%*s\n' "$i" "$tentativas" 20 ""
+            _SPINNER_CURSOR_OCULTO=0
+            tput cnorm 2>/dev/null
+            return 0
+        fi
+
+        printf '\r[✗] Tentativa %s/%s falhou.%*s\n' "$i" "$tentativas" 20 ""
+
+        if [ "$i" -lt "$tentativas" ]; then
+            sleep "$delay" &
+            local pid=$!; f=0
+            while kill -0 "$pid" 2>/dev/null; do
+                printf '\r[%s] Aguardando %ss antes da próxima tentativa...' "${frames:f:1}" "$delay"
+                f=$(( (f + 1) % len ))
+                sleep 0.1
+            done
+            wait "$pid"
+            printf '\r%*s\r' 60 ""
+        fi
+
+        (( i++ ))
+    done
+
+    printf 'Todas as %s tentativas falharam: %s\n' "$tentativas" "$*"
+    _SPINNER_CURSOR_OCULTO=0
+    tput cnorm 2>/dev/null
+    return 1
+}
+
+function tentar_backoff_spinner() {
+    # Executa um comando até N vezes com espera exponencial entre tentativas,
+    # exibindo um spinner durante a execução do comando e durante a espera.
+    # A cada falha o tempo de espera dobra: delay, 2*delay, 4*delay, etc.
+    # A saída do comando é descartada para não quebrar o layout do spinner.
+    # Retorna 0 na primeira execução bem-sucedida, 1 se todas as tentativas falharem.
+    # Modo de uso: tentar_backoff_spinner 4 2 wget -q https://exemplo.com
+    #   $1 = número máximo de tentativas
+    #   $2 = delay inicial em segundos (dobra a cada falha)
+    #   $@ = comando a executar
+    local tentativas="$1"
+    local delay="$2"
+    shift 2
+    local frames="⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏"
+    local len=${#frames} f pid status i=1
+
+    tput civis 2>/dev/null
+    _SPINNER_CURSOR_OCULTO=1
+    while [ "$i" -le "$tentativas" ]; do
+        "$@" &>/dev/null &
+        local pid=$!; f=0
+        while kill -0 "$pid" 2>/dev/null; do
+            printf '\r[%s] Tentativa %s/%s: %s' "${frames:f:1}" "$i" "$tentativas" "$*"
+            f=$(( (f + 1) % len ))
+            sleep 0.1
+        done
+        wait "$pid"; status=$?
+
+        if [ "$status" -eq 0 ]; then
+            printf '\r[✓] Concluído na tentativa %s/%s.%*s\n' "$i" "$tentativas" 20 ""
+            _SPINNER_CURSOR_OCULTO=0
+            tput cnorm 2>/dev/null
+            return 0
+        fi
+
+        printf '\r[✗] Tentativa %s/%s falhou.%*s\n' "$i" "$tentativas" 20 ""
+
+        if [ "$i" -lt "$tentativas" ]; then
+            sleep "$delay" &
+            localpid=$!; f=0
+            while kill -0 "$pid" 2>/dev/null; do
+                printf '\r[%s] Aguardando %ss (backoff exponencial)...' "${frames:f:1}" "$delay"
+                f=$(( (f + 1) % len ))
+                sleep 0.1
+            done
+            wait "$pid"
+            printf '\r%*s\r' 60 ""
+            delay=$(( delay * 2 ))
+        fi
+
+        (( i++ ))
+    done
+
+    printf 'Todas as %s tentativas falharam: %s\n' "$tentativas" "$*"
+    _SPINNER_CURSOR_OCULTO=0
+    tput cnorm 2>/dev/null
+    return 1
+}
+
+================================================================
+ ARQUIVO: lib/runu.sh
+================================================================
+# shellcheck shell=bash
+# runu.sh - Funções para execução de comandos com feedback visual no terminal
+#
+# Executa comandos em background enquanto exibe um spinner de progresso.
+# Ao término, exibe o resultado com ícone colorido (✓ sucesso / ✗ falha).
+# A saída do comando executado é redirecionada para /dev/null para não
+# interferir no layout da animação.
+#
+# Quando DRYRUN="1", nenhum comando é executado: as funções imprimem no stderr
+# o que seria feito, exibem a mensagem de conclusão com indicação "(dry-run)"
+# e retornam 0.
+#
+# Dependências: spinner.sh, dryrun.sh
+#
+# Funções disponíveis:
+#   executar              <msg> <cmd>          - Executa um comando local com spinner
+#   executar_remoto       <host> <msg> <cmd>   - Executa um comando remoto via SSH com spinner
+#   executar_com_timeout  <segundos> <cmd...>  - Executa um comando com limite máximo de tempo
+
+
+[[ -n "${_RUNU_SH_LOADED:-}" ]] && return 0
+readonly _RUNU_SH_LOADED=1
+
+source "$(dirname "${BASH_SOURCE[0]}")/spinner.sh"
+source "$(dirname "${BASH_SOURCE[0]}")/dryrun.sh"
+
+function executar() {
+    # Executa um comando shell em background exibindo um spinner de progresso.
+    # Ao concluir, exibe mensagem de sucesso (verde) ou falha (vermelho)
+    # com o código de saída do comando.
+    # A saída do comando (stdout e stderr) é descartada para não quebrar o layout.
+    # Modo de uso: executar"Instalando dependências" "apt install -y curl"
+    local msg="$1"
+    local cmd="$2"
+    local frames="⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏"
+
+    if [ "${DRYRUN:-}" = "1" ]; then
+        echo "[DRY-RUN] executar: $msg → $cmd" >&2
+        printf '\r\e[32m[✓]\e[0m %s concluído! (dry-run)%*s\n' "$msg" 10 ""
+        return 0
+    fi
+
+    eval "$cmd" > /dev/null 2>&1 &
+    local pid=$!
+
+    spinner "$pid" "$frames" "$msg"
+
+    wait "$pid"
+    local exit_code=$?
+
+    if [ $exit_code -eq 0 ]; then
+        printf '\r\e[32m[✓]\e[0m %s concluído!%*s\n' "$msg" 10 ""
+    else
+        printf '\r\e[31m[✗]\e[0m %s falhou (Erro: %d)%*s\n' "$msg" "$exit_code" 10 ""
+    fi
+
+    return $exit_code
+}
+
+function executar_remoto() {
+    # Executa um comando em um host remoto via SSH, exibindo um spinner de progresso.
+    # Usa BatchMode para não solicitar senhas interativamente e ConnectTimeout
+    # para evitar travamentos em hosts inacessíveis.
+    # A saída do comando remoto é descartada para não quebrar o layout.
+    # Retorna o código de saída do comando remoto.
+    # Modo de uso: executar_remoto "usuario@192.168.1.10" "Reiniciando nginx" "systemctl restart nginx"
+    local host="$1"
+    local msg="$2"
+    local cmd="$3"
+    local frames="⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏"
+
+    if [ "${DRYRUN:-}" = "1" ]; then
+        echo "[DRY-RUN] executar_remoto: $msg → ssh $host '$cmd'" >&2
+        printf '\r\e[32m[✓]\e[0m %s concluído! (dry-run)%*s\n' "$msg" 10 ""
+        return 0
+    fi
+
+    ssh -o BatchMode=yes -o ConnectTimeout=10 "$host" "$cmd" > /dev/null 2>&1 &
+    local pid=$!
+
+    spinner "$pid" "$frames" "$msg"
+
+    wait "$pid"
+    local exit_code=$?
+
+    if [ $exit_code -eq 0 ]; then
+        printf '\r\e[32m[✓]\e[0m %s concluído!%*s\n' "$msg" 10 ""
+    else
+        printf '\r\e[31m[✗]\e[0m %s falhou (Erro: %d)%*s\n' "$msg" "$exit_code" 10 ""
+    fi
+
+    return $exit_code
+}
+
+function executar_com_timeout() {
+    # Executa um comando com limite máximo de tempo em segundos.
+    # Usa o comando timeout(1) do sistema, disponível no GNU coreutils.
+    # Retorna 0 se o comando concluiu com sucesso dentro do prazo,
+    # o código de saída do próprio comando em caso de falha,
+    # ou 124 (código padrão de timeout(1)) se o tempo foi excedido.
+    # Modo de uso: executar_com_timeout 30 curl -s https://exemplo.com
+    #              executar_com_timeout 10 rsync -av origem/ destino/
+    #   $1 = segundos máximos de execução
+    #   $@ = comando a executar
+    local timeout_seg="$1"
+    shift
+
+    if [ "${DRYRUN:-}" = "1" ]; then
+        echo "[DRY-RUN] executar_com_timeout: ${timeout_seg}s → $*" >&2
+        return 0
+    fi
+
+    timeout "$timeout_seg" "$@"
+    local status=$?
+
+    if [ "$status" -eq 124 ]; then
+        echo "Timeout de ${timeout_seg}s atingido para: $*" >&2
+    fi
+
+    return "$status"
+}
+
+================================================================
+ ARQUIVO: lib/servicou.sh
+================================================================
+# shellcheck shell=bash
+# servicou.sh - Funções para gerenciamento de serviços via systemd
+#
+# Fornece wrappers para as operações mais comuns do systemctl,
+# simplificando o gerenciamento de serviços em scripts de automação.
+# Verifica automaticamente se systemd está disponível antes de cada operação,
+# retornando 1 com mensagem de erro em sistemas que usam SysV, OpenRC ou similares.
+#
+# Quando DRYRUN="1", nenhum serviço é iniciado, parado ou modificado:
+# as funções imprimem no stderr o comando systemctl que seria executado.
+# servico_ativo e servico_status não são afetados (operações somente-leitura).
+#
+# Dependências: systemu.sh, alerta.sh, dryrun.sh
+#
+# Funções disponíveis:
+#   servico_ativo       <nome> - Verifica se o serviço está em execução
+#   servico_iniciar     <nome> - Inicia o serviço
+#   servico_parar       <nome> - Para o serviço
+#   servico_reiniciar   <nome> - Reinicia o serviço
+#   servico_habilitar   <nome> - Habilita início automático no boot
+#   servico_desabilitar <nome> - Desabilita início automático no boot
+#   servico_status      <nome> - Exibe o status detalhado do serviço
+
+
+[[ -n "${_SERVICOU_SH_LOADED:-}" ]] && return 0
+readonly _SERVICOU_SH_LOADED=1
+
+source "$(dirname "${BASH_SOURCE[0]}")/systemu.sh"
+source "$(dirname "${BASH_SOURCE[0]}")/alerta.sh"
+source "$(dirname "${BASH_SOURCE[0]}")/dryrun.sh"
+
+function _servicou_verificar_systemd() {
+    # Verifica se o systemctl está disponível no PATH antes de qualquer operação.
+    # Retorna 0 se systemd estiver disponível, 1 caso contrário.
+    # Emite mensagem de erro descritiva para facilitar diagnóstico em containers
+    # e sistemas que usam alternativas como OpenRC, SysV ou s6.
+    if ! command -v systemctl >/dev/null 2>&1; then
+        erro "systemd não está disponível neste sistema. As funções de serviço requerem systemctl." >&2
+        return 1
+    fi
+    return 0
+}
+
+function servico_ativo() {
+    # Verifica silenciosamente se um serviço systemd está em execução.
+    # Retorna 0 se ativo, 1 caso contrário. Ideal para uso em condicionais.
+    # Modo de uso: servico_ativo "nginx" && echo "nginx está rodando"
+    _servicou_verificar_systemd || return 1
+    systemctl is-active --quiet "$1"
+}
+
+function servico_iniciar() {
+    # Inicia um serviço systemd.
+    # Requer privilégios de root ou sudo.
+    # Modo de uso: servico_iniciar "nginx"
+    _servicou_verificar_systemd || return 1
+    dryrun_exec "servicou: systemctl start '$1'" systemctl start "$1"
+}
+
+function servico_parar() {
+    # Para um serviço systemd em execução.
+    # Requer privilégios de root ou sudo.
+    # Modo de uso: servico_parar "nginx"
+    _servicou_verificar_systemd || return 1
+    dryrun_exec "servicou: systemctl stop '$1'" systemctl stop "$1"
+}
+
+function servico_reiniciar() {
+    # Reinicia um serviço systemd, parando e iniciando novamente.
+    # Útil para aplicar novas configurações sem intervenção manual.
+    # Requer privilégios de root ou sudo.
+    # Modo de uso: servico_reiniciar "nginx"
+    _servicou_verificar_systemd || return 1
+    dryrun_exec "servicou: systemctl restart '$1'" systemctl restart "$1"
+}
+
+function servico_habilitar() {
+    # Habilita o início automático do serviço durante o boot do sistema.
+    # Requer privilégios de root ou sudo.
+    # Modo de uso: servico_habilitar "nginx"
+    _servicou_verificar_systemd || return 1
+    dryrun_exec "servicou: systemctl enable '$1'" systemctl enable "$1"
+}
+
+function servico_desabilitar() {
+    # Desabilita o início automático do serviço durante o boot do sistema.
+    # O serviço não é parado imediatamente; apenas o boot automático é desativado.
+    # Requer privilégios de root ou sudo.
+    # Modo de uso: servico_desabilitar "nginx"
+    _servicou_verificar_systemd || return 1
+    dryrun_exec "servicou: systemctl disable '$1'" systemctl disable "$1"
+}
+
+function servico_status() {
+    # Exibe o status detalhado de um serviço systemd, incluindo logs recentes.
+    # Modo de uso: servico_status "nginx"
+    _servicou_verificar_systemd || return 1
+    systemctl status "$1"
+}
+
+================================================================
+ ARQUIVO: lib/sinais.sh
+================================================================
+# shellcheck shell=bash
+# sinais.sh - Infraestrutura de tratamento de sinais e cleanup garantido
+#
+# Implementa o padrão acumulador de handlers: múltiplos módulos e scripts
+# podem registrar funções de limpeza sem sobrescrever uns aos outros.
+# Os handlers são executados em ordem reversa de registração (pilha LIFO),
+# garantindo que o último recurso adquirido seja o primeiro a ser liberado.
+#
+# Um único trap central é instalado para EXIT, INT, TERM e HUP.
+# Os traps de sinal removem o trap EXIT antes de chamar os handlers,
+# evitando dupla execução.
+#
+# A variável _SINAIS_CODIGO_SAIDA fica disponível aos handlers para que
+# possam distinguir saída normal (0) de saída por sinal (130=INT, 143=TERM).
+#
+# Dependências: nenhuma
+#
+# Funções disponíveis:
+#   registrar_cleanup     <comando>        - Adiciona um comando ao stack de limpeza
+#   registrar_cleanup_cmd <cmd> [args...]  - Versão segura para comandos com espaços nos argumentos
+#   cancelar_cleanup      <comando>        - Remove um comando do stack de limpeza
+
+
+[[ -n "${_SINAIS_SH_LOADED:-}" ]] && return 0
+readonly _SINAIS_SH_LOADED=1
+
+# Stack de comandos de limpeza (executados em ordem LIFO na saída)
+_CLEANUP_HANDLERS=()
+
+# Código de saída que disparou a limpeza — acessível aos handlers
+_SINAIS_CODIGO_SAIDA=0
+
+function registrar_cleanup() {
+    # Adiciona um comando ao stack de limpeza.
+    # Aceita qualquer string de comando shell válida.
+    # Os comandos são executados em ordem inversa à de registração (LIFO):
+    # o último recurso adquirido é o primeiro a ser liberado.
+    # Modo de uso: registrar_cleanup "rm -f /tmp/dados.tmp"
+    #              registrar_cleanup "lock_liberar /tmp/app.lock"
+    _CLEANUP_HANDLERS+=("$1")
+}
+
+function registrar_cleanup_cmd() {
+    # Versão segura de registrar_cleanup para comandos cujos argumentos podem conter
+    # espaços, aspas ou outros caracteres especiais (ex: caminhos de arquivo com espaços).
+    # Cada argumento é escapado com printf '%q' antes do registro, garantindo que o
+    # eval interno de _sinais_executar_cleanups os trate como tokens individuais.
+    # Modo de uso: registrar_cleanup_cmd rm -f "/tmp/meu arquivo.tmp"
+    #              registrar_cleanup_cmd lock_liberar "/var/run/meu app.lock"
+    local cmd_escapado=()
+    local arg
+    for arg in "$@"; do
+        cmd_escapado+=("$(printf '%q' "$arg")")
+    done
+    registrar_cleanup "${cmd_escapado[*]}"
+}
+
+function cancelar_cleanup() {
+    # Remove um comando do stack de limpeza.
+    # Útil quando o recurso já foi liberado manualmente antes da saída do script.
+    # Modo de uso: cancelar_cleanup "rm -f /tmp/dados.tmp"
+    local novo=()
+    local alvo="$1"
+    for handler in "${_CLEANUP_HANDLERS[@]}"; do
+        [[ "$handler" != "$alvo" ]] && novo+=("$handler")
+    done
+    _CLEANUP_HANDLERS=("${novo[@]}")
+}
+
+function _sinais_executar_cleanups() {
+    # Percorre o stack em ordem reversa e executa cada handler.
+    # Erros individuais são suprimidos (2>/dev/null) para garantir que
+    # todos os handlers rodem mesmo que um deles falhe.
+    local i
+    for (( i=${#_CLEANUP_HANDLERS[@]}-1; i>=0; i-- )); do
+        eval "${_CLEANUP_HANDLERS[$i]}" 2>/dev/null
+    done
+}
+
+# Trap para saída normal: captura o código de saída original antes de limpar
+trap '_SINAIS_CODIGO_SAIDA=$?; _sinais_executar_cleanups' EXIT
+
+# Traps para sinais: remove o trap EXIT antes de executar para evitar
+# dupla execução, depois sai com o código convencional do sinal recebido
+# (128 + número do sinal: INT=2→130, HUP=1→129, TERM=15→143)
+trap 'trap - EXIT; _SINAIS_CODIGO_SAIDA=130; _sinais_executar_cleanups; exit 130' INT
+trap 'trap - EXIT; _SINAIS_CODIGO_SAIDA=143; _sinais_executar_cleanups; exit 143' TERM
+trap 'trap - EXIT; _SINAIS_CODIGO_SAIDA=129; _sinais_executar_cleanups; exit 129' HUP
+
+================================================================
+ ARQUIVO: lib/spinner.sh
+================================================================
+# shellcheck shell=bash
+# spinner.sh - Animações de carregamento para exibir progresso de tarefas demoradas
+#
+# Todas as funções recebem o PID de um processo em background e exibem
+# uma animação enquanto aguardam sua conclusão.
+# O cursor é ocultado durante a animação e restaurado ao final.
+#
+# Integração com sinais.sh: ao ser carregado, registra automaticamente
+# _spinner_restaurar_cursor no stack de cleanup. Se o script for interrompido
+# (Ctrl+C, kill) com um spinner ativo, o cursor é restaurado automaticamente.
+#
+# Dependências: sinais.sh
+#
+# Funções disponíveis:
+#   spinner          <pid> <frames> [msg] [delay] - Spinner genérico com frames customizáveis
+#   spinner_pingpong <pid> [msg] [delay]           - Animação de barra que vai e volta
+#   spinner_bar      <pid> [msg] [delay]           - Barra com bloco deslizante
+#
+# Exemplos de frames para spinner():
+#   Braille:   "⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏"
+#   Simples:   "|\-/"
+#   Círculo:   "◐◓◑◒"
+#   Relógio:   "🕛🕐🕑🕒🕓🕔🕕🕖🕗🕘🕙🕚"
+
+
+[[ -n "${_SPINNER_SH_LOADED:-}" ]] && return 0
+readonly _SPINNER_SH_LOADED=1
+
+source "$(dirname "${BASH_SOURCE[0]}")/sinais.sh"
+
+# Flag global: 1 enquanto qualquer spinner estiver com o cursor oculto
+_SPINNER_CURSOR_OCULTO=0
+
+function _spinner_restaurar_cursor() {
+    # Restaura o cursor do terminal se ele foi ocultado por um spinner.
+    # Chamada automaticamente pelo stack de cleanup de sinais.sh
+    # em caso de interrupção (Ctrl+C, kill, erro não tratado).
+    if [ "$_SPINNER_CURSOR_OCULTO" -eq 1 ]; then
+        tput cnorm 2>/dev/null
+        _SPINNER_CURSOR_OCULTO=0
+    fi
+}
+
+# Registra a restauração do cursor no stack de cleanup global
+registrar_cleanup "_spinner_restaurar_cursor"
+
+function spinner() {
+    # Exibe uma animação de spinner genérico enquanto um processo está em execução.
+    # Os frames de animação são definidos como uma string de caracteres,
+    # onde cada caractere representa um quadro da animação.
+    # Aguarda o processo internamente via wait e retorna o exit code dele.
+    # Exibe [✓] em caso de sucesso ou [✗] em caso de falha.
+    # Modo de uso:
+    #   my_comando &
+    #   spinner "$!" "⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏" "baixando..."
+    #   # o wait já foi feito pelo spinner; use $? para checar o resultado
+    local pid="$1"
+    local frames="$2"
+    local msg="${3:-trabalhando...}"
+    local delay="${4:-0.1}"
+
+    local i=0 len=${#frames}
+
+    tput civis 2>/dev/null
+    _SPINNER_CURSOR_OCULTO=1
+
+    while kill -0 "$pid" 2>/dev/null; do
+        printf '\r[%s] %s' "${frames:i:1}" "$msg"
+        i=$(( (i + 1) % len ))
+        sleep "$delay"
+    done
+
+    wait "$pid"
+    local status=$?
+
+    if [ "$status" -eq 0 ]; then
+        printf '\r[✓] concluído!%*s\n' 20 ""
+    else
+        printf '\r[✗] falhou (código %s).%*s\n' "$status" 15 ""
+    fi
+
+    _SPINNER_CURSOR_OCULTO=0
+    tput cnorm 2>/dev/null
+    return "$status"
+}
+
+function spinner_pingpong() {
+    # Exibe uma animação de barra vertical que cresce e diminui (efeito ping-pong)
+    # enquanto um processo está em execução.
+    # Aguarda o processo internamente via wait e retorna o exit code dele.
+    # Exibe [✓] em caso de sucesso ou [✗] em caso de falha.
+    # Modo de uso:
+    #   my_comando &
+    #   spinner_pingpong "$!" "processando..."
+    #   # o wait já foi feito pelo spinner; use $? para checar o resultado
+    local pid="$1"
+    local msg="${2:-trabalhando...}"
+    local delay="${3:-0.07}"
+    local frames=( "▁" "▂" "▃" "▄" "▅" "▆" "▇" "█" "▇" "▆" "▅" "▄" "▃" "▂" )
+    local i=0
+
+    tput civis 2>/dev/null
+    _SPINNER_CURSOR_OCULTO=1
+    while kill -0 "$pid" 2>/dev/null; do
+        printf '\r[%s] %s' "${frames[i]}" "$msg"
+        i=$(( (i + 1) % ${#frames[@]} ))
+        sleep "$delay"
+    done
+
+    wait "$pid"
+    local status=$?
+
+    if [ "$status" -eq 0 ]; then
+        printf '\r[✓] concluído!%*s\n' 20 ""
+    else
+        printf '\r[✗] falhou (código %s).%*s\n' "$status" 15 ""
+    fi
+
+    _SPINNER_CURSOR_OCULTO=0
+    tput cnorm 2>/dev/null
+    return "$status"
+}
+
+function spinner_bar() {
+    # Exibe uma barra horizontal com um bloco deslizante que vai e volta
+    # enquanto um processo está em execução.
+    # Aguarda o processo internamente via wait e retorna o exit code dele.
+    # Exibe [✓] em caso de sucesso ou [✗] em caso de falha.
+    # Modo de uso:
+    #   my_comando &
+    #   spinner_bar "$!" "carregando..."
+    #   # o wait já foi feito pelo spinner; use $? para checar o resultado
+    local pid="$1"
+    local msg="${2:-trabalhando...}"
+    local delay="${3:-0.05}"
+    local width=10
+    local pos=0 dir=1
+
+    tput civis 2>/dev/null
+    _SPINNER_CURSOR_OCULTO=1
+    while kill -0 "$pid" 2>/dev/null; do
+        local bar
+        bar=$(printf "%*s" "$width" "")
+        bar="${bar// /-}"
+        bar="${bar:0:pos}█${bar:pos+1}"
+        printf '\r[%s] %s' "$bar" "$msg"
+
+        pos=$((pos + dir))
+        if (( pos <= 0 )); then dir=1; pos=0; fi
+        if (( pos >= width-1 )); then dir=-1; pos=$((width-1)); fi
+
+        sleep "$delay"
+    done
+
+    wait "$pid"
+    local status=$?
+
+    if [ "$status" -eq 0 ]; then
+        printf '\r[✓] concluído!%*s\n' 20 ""
+    else
+        printf '\r[✗] falhou (código %s).%*s\n' "$status" 15 ""
+    fi
+
+    _SPINNER_CURSOR_OCULTO=0
+    tput cnorm 2>/dev/null
+    return "$status"
+}
+
+================================================================
+ ARQUIVO: lib/systemu.sh
+================================================================
+# shellcheck shell=bash
+# systemu.sh - Funções utilitárias gerais de sistema
+#
+# Fornece verificações de privilégios, detecção de programas instalados
+# e funções de encerramento padronizadas para scripts de automação.
+#
+# Dependências: nenhuma
+#
+# Funções disponíveis:
+#   sys_e_root                  - Verifica se o script está sendo executado como root
+#   sys_programa_esta_instalado - Verifica se um programa está disponível no PATH
+#   sys_finaliza_ok             - Encerra o script com código de saída 0 (sucesso)
+#   sys_finaliza_erro           - Encerra o script com código de saída 1 (erro)
+
+
+[[ -n "${_SYSTEMU_SH_LOADED:-}" ]] && return 0
+readonly _SYSTEMU_SH_LOADED=1
+
+function sys_e_root() {
+    # Verifica se o usuário que executa o script é root (EUID = 0).
+    # Retorna 0 se for root, 1 caso contrário.
+    # Modo de uso: sys_e_root || { erro "Execute como root"; exit 1; }
+    if [ "$EUID" -ne 0 ]; then
+        return 1
+    else
+        return 0
+    fi
+}
+
+function sys_programa_esta_instalado() {
+    # Verifica se um programa está instalado e acessível no PATH do sistema.
+    # Retorna 0 se o programa for encontrado, 1 caso contrário.
+    # Modo de uso: sys_programa_esta_instalado "curl" || echo "curl não instalado"
+    if command -v "$1" >/dev/null 2>&1; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+function sys_finaliza_ok() {
+    # Encerra o script imediatamente com código de saída 0 (sucesso).
+    # Usar ao final de scripts que concluíram com êxito.
+    # Modo de uso: sys_finaliza_ok
+    exit 0
+}
+
+function sys_finaliza_erro() {
+    # Encerra o script imediatamente com código de saída 1 (erro).
+    # Usar quando o script detectar uma condição de falha irrecuperável.
+    # Modo de uso: sys_finaliza_erro
+    exit 1
+}
+
+
+================================================================
+ ARQUIVO: lib/textfilesu.sh
+================================================================
+# shellcheck shell=bash
+# textfilesu.sh - Funções para leitura, busca e modificação de arquivos de texto
+#
+# Fornece operações de contagem de linhas/palavras/bytes, busca por conteúdo,
+# substituição de texto com backup automático e conversão de line endings.
+#
+# As funções de contagem imprimem o resultado no stdout como inteiro puro,
+# sem unidade, para facilitar comparações aritméticas.
+# As funções de substituição modificam o arquivo em disco (in-place).
+# Todas as funções retornam 1 se o arquivo informado não existir.
+#
+# Quando DRYRUN="1", as funções de substituição e conversão simulam suas operações
+# sem modificar nenhum arquivo. O backup automático de tf_substitui_tudo também
+# é simulado (via backupu.sh que respeita DRYRUN).
+#
+# Dependências: alerta.sh, backupu.sh, dryrun.sh
+#
+# Funções disponíveis:
+#   tf_conta_linhas               <arquivo>           - Número total de linhas
+#   tf_conta_palavras             <arquivo>           - Número total de palavras
+#   tf_conta_caracteres           <arquivo>           - Número de caracteres Unicode
+#   tf_conta_bytes                <arquivo>           - Número de bytes (tamanho bruto)
+#   tf_conta_linhas_nao_vazias    <arquivo>           - Linhas que têm ao menos um caractere não-espaço
+#   tf_conta_linhas_unicas        <arquivo>           - Número de linhas distintas (sem duplicatas)
+#   tf_conta_ocorrencias          <arquivo> <palavra> - Número de ocorrências de uma palavra/padrão
+#   tf_arquivo_contem             <arquivo> <palavra> - Verdadeiro se o arquivo contiver a palavra
+#   tf_substitui_tudo             <arquivo> <old> <new> - Substitui todas as ocorrências (com backup)
+#   tf_substitui_primeira         <arquivo> <old> <new> - Substitui apenas a primeira ocorrência
+#   tf_substitui_ultima           <arquivo> <old> <new> - Substitui apenas a última ocorrência
+#   tf_e_fim_de_linha_unix        <arquivo>           - Verdadeiro se line ending for LF (Unix)
+#   tf_e_fim_de_linha_windows     <arquivo>           - Verdadeiro se line ending for CRLF (Windows)
+#   tf_converte_para_fim_de_linha_unix    <arquivo>   - Converte CRLF → LF
+#   tf_converte_para_fim_de_linha_windows <arquivo>   - Converte LF → CRLF
+
+
+[[ -n "${_TEXTFILESU_SH_LOADED:-}" ]] && return 0
+readonly _TEXTFILESU_SH_LOADED=1
+
+source "$(dirname "${BASH_SOURCE[0]}")/alerta.sh"
+source "$(dirname "${BASH_SOURCE[0]}")/backupu.sh"
+source "$(dirname "${BASH_SOURCE[0]}")/dryrun.sh"
+
+function tf_conta_linhas() {
+    # Retorna o número total de linhas do arquivo como inteiro.
+    # Uma linha é delimitada por \n. Arquivos sem \n final têm sua última
+    # linha contada normalmente pelo wc.
+    # Retorna 1 se o arquivo não existir.
+    # Modo de uso: tf_conta_linhas /var/log/syslog
+    #              total=$(tf_conta_linhas "$arq")
+    #              echo "$arq tem $total linhas"
+    local arquivo="$1"
+    if [[ -f "$arquivo" ]]; then
+        wc -l < "$arquivo"
+    else
+        alerta "Arquivo não encontrado: $arquivo"
+        return 1
+    fi
+}
+
+function tf_conta_palavras() {
+    # Retorna o número de palavras do arquivo como inteiro.
+    # Uma "palavra" é qualquer sequência de caracteres não-espaço separada
+    # por espaço, tab ou newline (definição de wc -w).
+    # Retorna 1 se o arquivo não existir.
+    # Modo de uso: tf_conta_palavras relatorio.txt
+    #              [ "$(tf_conta_palavras "$arq")" -gt 500 ] && alerta "Texto longo"
+    local arquivo="$1"
+    if [[ -f "$arquivo" ]]; then
+        wc -w < "$arquivo"
+    else
+        alerta "Arquivo não encontrado: $arquivo" >&2
+        return 1
+    fi
+}
+
+function tf_conta_caracteres() {
+    # Retorna o número de caracteres Unicode do arquivo (usa wc -m).
+    # Diferente de tf_conta_bytes: caracteres multibyte (acentos, emojis, CJK)
+    # contam como 1 caractere, mas ocupam mais de 1 byte.
+    # Depende do locale do sistema estar configurado para UTF-8.
+    # Retorna 1 se o arquivo não existir.
+    # Modo de uso: tf_conta_caracteres artigo.txt
+    #              chars=$(tf_conta_caracteres "$arq")
+    local arquivo="$1"
+    if [[ -f "$arquivo" ]]; then
+        wc -m < "$arquivo"
+    else
+        alerta "Arquivo não encontrado: $arquivo" >&2
+        return 1
+    fi
+}
+
+function tf_conta_bytes() {
+    # Retorna o tamanho bruto do arquivo em bytes como inteiro.
+    # Equivalente a tamanho_do_arquivo de filesu.sh, mas via wc.
+    # Para arquivos com caracteres multibyte, difere de tf_conta_caracteres.
+    # Retorna 1 se o arquivo não existir.
+    # Modo de uso: tf_conta_bytes imagem.jpg
+    #              [ "$(tf_conta_bytes "$arq")" -gt 1048576 ] && alerta "Arquivo maior que 1 MB"
+    local arquivo="$1"
+    if [[ -f "$arquivo" ]]; then
+        wc -c < "$arquivo"
+    else
+        alerta "Arquivo não encontrado: $arquivo" >&2
+        return 1
+    fi
+}
+
+function tf_conta_linhas_nao_vazias() {
+    # Retorna o número de linhas que contêm ao menos um caractere não-espaço.
+    # Linhas compostas apenas por espaços e tabs são tratadas como vazias e
+    # não entram na contagem.
+    # Retorna 1 se o arquivo não existir.
+    # Modo de uso: tf_conta_linhas_nao_vazias script.sh
+    #              cod=$(tf_conta_linhas_nao_vazias "$arq")
+    #              vaz=$(( $(tf_conta_linhas "$arq") - cod ))
+    #              echo "$vaz linhas em branco no arquivo"
+    local arquivo="$1"
+    if [[ -f "$arquivo" ]]; then
+        grep -cve '^\s*$' "$arquivo"
+    else
+        alerta "Arquivo não encontrado: $arquivo" >&2
+        return 1
+    fi
+}
+
+function tf_conta_linhas_unicas() {
+    # Retorna o número de linhas distintas no arquivo como inteiro.
+    # Linhas duplicadas são contadas apenas uma vez, independente de quantas
+    # vezes apareçam. A comparação é feita após ordenação interna (sort -u).
+    # Retorna 1 se o arquivo não existir.
+    # Modo de uso: tf_conta_linhas_unicas ips.txt
+    #              unicos=$(tf_conta_linhas_unicas "$log")
+    #              total=$(tf_conta_linhas "$log")
+    #              echo "$unicos entradas distintas de $total total"
+    local arquivo="$1"
+    if [[ -f "$arquivo" ]]; then
+        sort -u "$arquivo" | wc -l
+    else
+        alerta "Arquivo não encontrado: $arquivo" >&2
+        return 1
+    fi
+}
+
+function tf_conta_ocorrencias() {
+    # Conta quantas vezes uma palavra ou padrão grep aparece no arquivo.
+    # O padrão é tratado como expressão regular básica (BRE), igual ao grep.
+    # A contagem soma todas as ocorrências em todas as linhas (não apenas
+    # linhas que contêm o padrão, mas cada ocorrência individualmente).
+    # Retorna 1 se o arquivo não existir.
+    # Modo de uso: tf_conta_ocorrencias /var/log/auth.log "Failed password"
+    #              tf_conta_ocorrencias config.yaml "host:"
+    local arquivo="$1"
+    local palavra="$2"
+    if [[ -f "$arquivo" ]]; then
+        grep -o "$palavra" "$arquivo" | wc -l
+    else
+        alerta "Arquivo não encontrado: $arquivo" >&2
+        return 1
+    fi
+}
+
+function tf_arquivo_contem() {
+    # Retorna 0 se o arquivo contiver a palavra ou padrão informado, 1 caso contrário.
+    # O padrão é tratado como expressão regular básica (BRE), igual ao grep.
+    # A busca percorre todas as linhas; para no primeiro match encontrado.
+    # Retorna 1 também se o arquivo não existir.
+    # Modo de uso: tf_arquivo_contem /etc/fstab "UUID" && echo "fstab usa UUID"
+    #              tf_arquivo_contem "$config" "^DEBUG=1" || alerta "Debug não ativado"
+    local arquivo="$1"
+    local palavra="$2"
+    if [[ -f "$arquivo" ]]; then
+        if grep -q "$palavra" "$arquivo"; then
+            return 0
+        else
+            return 1
+        fi
+    else
+        alerta "Arquivo não encontrado: $arquivo" >&2
+        return 1
+    fi
+}
+
+function tf_substitui_tudo() {
+    # Substitui todas as ocorrências de palavra_antiga por palavra_nova no arquivo,
+    # modificando-o em disco (operação in-place).
+    #
+    # BACKUP AUTOMÁTICO: antes de qualquer modificação, cria uma cópia do arquivo
+    # original com timestamp (via backupu.sh). Se o backup falhar, a substituição
+    # é cancelada e o arquivo original permanece intacto.
+    #
+    # Os padrões são tratados como literais: caracteres como /, &, \ são
+    # escapados automaticamente para evitar quebra do comando sed.
+    #
+    # Retorna 1 se o arquivo não existir ou se o backup falhar.
+    #
+    # Modo de uso: substitui_tudo /etc/app/config.env "host_antigo" "host_novo"
+    #              substitui_tudo nginx.conf "http://api.local" "https://api.prod.com"
+    local arquivo="$1"
+    local palavra_antiga="$2"
+    local palavra_nova="$3"
+
+    if [[ ! -f "$arquivo" ]]; then
+        erro "Arquivo não encontrado: $arquivo" >&2
+        return 1
+    fi
+
+    local backup
+    backup=$(backup_arquivo "$arquivo") || {
+        erro "Não foi possível criar backup de '$arquivo'. Substituição cancelada." >&2
+        return 1
+    }
+
+    info "Backup criado: $backup"
+    local old_esc="${palavra_antiga//\\/\\\\}"
+    old_esc="${old_esc//|/\\|}"
+    local new_esc="${palavra_nova//\\/\\\\}"
+    new_esc="${new_esc//&/\\&}"
+    new_esc="${new_esc//|/\\|}"
+    dryrun_exec "tf_substitui_tudo: sed -i 's|$old_esc|$new_esc|g' '$arquivo'" \
+        sed -i "s|$old_esc|$new_esc|g" "$arquivo"
+}
+
+function tf_substitui_primeira() {
+    # Substitui apenas a primeira ocorrência de palavra_antiga por palavra_nova
+    # no arquivo, modificando-o em disco (operação in-place).
+    # Útil quando o padrão pode aparecer múltiplas vezes mas apenas a primeira
+    # instância deve ser alterada (ex: primeira declaração de uma variável).
+    # Os padrões são escapados automaticamente para uso seguro com sed.
+    # Retorna 1 se o arquivo não existir.
+    # Modo de uso: tf_substitui_primeira /etc/hosts "127.0.0.1 localhost" "127.0.0.1 meuhost"
+    local arquivo="$1"
+    local palavra_antiga="$2"
+    local palavra_nova="$3"
+    if [[ -f "$arquivo" ]]; then
+        local old_esc="${palavra_antiga//\\/\\\\}"
+        old_esc="${old_esc//|/\\|}"
+        local new_esc="${palavra_nova//\\/\\\\}"
+        new_esc="${new_esc//&/\\&}"
+        new_esc="${new_esc//|/\\|}"
+        dryrun_exec "tf_substitui_primeira: sed primeira ocorrência '$palavra_antiga' em '$arquivo'" \
+            sed -i "0,|$old_esc|s|$old_esc|$new_esc|" "$arquivo"
+    else
+        alerta "Arquivo não encontrado: $arquivo" >&2
+        return 1
+    fi
+}
+
+function tf_substitui_ultima() {
+    # Substitui apenas a última ocorrência de palavra_antiga por palavra_nova
+    # no arquivo, modificando-o em disco (operação in-place).
+    # Útil quando o padrão aparece múltiplas vezes e apenas a última instância
+    # deve ser alterada (ex: última entrada de um log, último bloco de config).
+    # Os padrões são escapados automaticamente para uso seguro com sed.
+    # ATENÇÃO: a implementação lê o arquivo inteiro em memória para localizar
+    # a última ocorrência — evite em arquivos muito grandes (> algumas dezenas de MB).
+    # Retorna 1 se o arquivo não existir.
+    # Modo de uso: tf_substitui_ultima deploy.log "status: pending" "status: done"
+    local arquivo="$1"
+    local palavra_antiga="$2"
+    local palavra_nova="$3"
+    if [[ -f "$arquivo" ]]; then
+        local old_esc="${palavra_antiga//\\/\\\\}"
+        old_esc="${old_esc//|/\\|}"
+        local new_esc="${palavra_nova//\\/\\\\}"
+        new_esc="${new_esc//&/\\&}"
+        new_esc="${new_esc//|/\\|}"
+        dryrun_exec "tf_substitui_ultima: sed última ocorrência '$palavra_antiga' em '$arquivo'" \
+            sed -i ":a;N;\$!ba;s|\(.*\)$old_esc|\1$new_esc|" "$arquivo"
+    else
+        alerta "Arquivo não encontrado: $arquivo" >&2
+        return 1
+    fi
+}
+
+function tf_e_fim_de_linha_unix() {
+    # Retorna 0 se o arquivo usar line endings Unix (LF, \n).
+    # Retorna 1 se usar line endings Windows (CRLF, \r\n) ou se não existir.
+    # Use para verificar antes de processar arquivos que podem vir de ambientes
+    # Windows, onde ferramentas como awk e grep podem se comportar de forma inesperada.
+    # Modo de uso: tf_e_fim_de_linha_unix script.sh || tf_converte_para_fim_de_linha_unix script.sh
+    local arquivo="$1"
+    if [[ -f "$arquivo" ]]; then
+        if file "$arquivo" | grep -q "CRLF"; then
+            return 1
+        else
+            return 0
+        fi
+    else
+        alerta "Arquivo não encontrado: $arquivo" >&2
+        return 1
+    fi
+}
+
+function tf_e_fim_de_linha_windows() {
+    # Retorna 0 se o arquivo usar line endings Windows (CRLF, \r\n).
+    # Retorna 1 se usar line endings Unix (LF) ou se não existir.
+    # Modo de uso: tf_e_fim_de_linha_windows "$arq" && tf_converte_para_fim_de_linha_unix "$arq"
+    local arquivo="$1"
+    if [[ -f "$arquivo" ]]; then
+        if file "$arquivo" | grep -q "CRLF"; then
+            return 0
+        else
+            return 1
+        fi
+    else
+        alerta "Arquivo não encontrado: $arquivo" >&2
+        return 1
+    fi
+}
+
+function tf_converte_para_fim_de_linha_unix() {
+    # Remove os caracteres \r de cada linha do arquivo, convertendo CRLF → LF.
+    # Modifica o arquivo em disco (in-place). Arquivos que já usam LF não são afetados.
+    # Útil para normalizar arquivos vindos de ambientes Windows antes de processá-los
+    # com ferramentas Unix (awk, grep, bash, etc.) que podem não tratar \r corretamente.
+    # Retorna 1 se o arquivo não existir.
+    # Modo de uso: tf_converte_para_fim_de_linha_unix config.env
+    #              tf_e_fim_de_linha_windows "$arq" && tf_converte_para_fim_de_linha_unix "$arq"
+    local arquivo="$1"
+    if [[ -f "$arquivo" ]]; then
+        dryrun_exec "tf_converte_para_fim_de_linha_unix: CRLF→LF em '$arquivo'" \
+            sed -i 's/\r$//' "$arquivo"
+    else
+        alerta "Arquivo não encontrado: $arquivo" >&2
+        return 1
+    fi
+}
+
+function tf_converte_para_fim_de_linha_windows() {
+    # Adiciona \r ao final de cada linha do arquivo, convertendo LF → CRLF.
+    # Modifica o arquivo em disco (in-place).
+    # Útil para gerar arquivos que precisam ser lidos em editores ou sistemas
+    # Windows que esperam CRLF (ex: Notepad, algumas ferramentas legadas).
+    # ATENÇÃO: aplicar em um arquivo que já tem CRLF duplica o \r (\r\r\n).
+    # Verifique com tf_e_fim_de_linha_unix antes de converter.
+    # Retorna 1 se o arquivo não existir.
+    # Modo de uso: tf_e_fim_de_linha_unix "$arq" && tf_converte_para_fim_de_linha_windows "$arq"
+    local arquivo="$1"
+    if [[ -f "$arquivo" ]]; then
+        dryrun_exec "tf_converte_para_fim_de_linha_windows: LF→CRLF em '$arquivo'" \
+            sed -i 's/$/\r/' "$arquivo"
+    else
+        alerta "Arquivo não encontrado: $arquivo" >&2
+        return 1
+    fi
+}
+
+================================================================
+ ARQUIVO: lib/utils.sh
+================================================================
+# shellcheck shell=bash
+# utils.sh - Funções utilitárias para manipulação de strings e extração de campos
+#
+# Fornece operações básicas sobre strings que não estão disponíveis
+# nativamente no Bash de forma conveniente, além de wrappers awk para
+# extração e soma de campos em fluxos de texto.
+# As implementações de string usam apenas recursos nativos do Bash,
+# sem dependências de ferramentas externas.
+#
+# Dependências: nenhuma
+#
+# Funções disponíveis:
+#   concatena        <elementos...> <delimitador> - Une elementos com um delimitador
+#   separa           <string> [delimitador]       - Divide uma string em elementos
+#   trim             <string>                     - Remove espaços nas duas extremidades
+#   maiusculas       <string>                     - Converte para maiúsculas
+#   minusculas       <string>                     - Converte para minúsculas
+#   comeca_com       <string> <prefixo>           - Retorna 0 se string começa com prefixo
+#   termina_com      <string> <sufixo>            - Retorna 0 se string termina com sufixo
+#   contem           <string> <substring>         - Retorna 0 se string contém substring
+#   preenche_esquerda <string> <largura> [char]   - Alinha à direita preenchendo à esquerda
+#   preenche_direita  <string> <largura> [char]   - Alinha à esquerda preenchendo à direita
+#   repete           <string> <n>                 - Repete a string N vezes
+#   campo            <num> [delimitador]          - Extrai campo N de stdin usando awk
+#   total            <num> [delimitador]          - Soma campo N de todas as linhas do stdin
+
+
+[[ -n "${_UTILS_SH_LOADED:-}" ]] && return 0
+readonly _UTILS_SH_LOADED=1
+
+function utils_concatena() {
+    # Concatena elementos usando um delimitador, com suporte correto a argumentos opcionais.
+    # O delimitador é sempre o PRIMEIRO argumento, followed by elementos variáveis.
+    # Se nenhum elemento for fornecido, retorna vazio. Se nenhum delimitador, usa espaço.
+    # Modo de uso: utils_concatena "," "a" "b" "c"    → "a,b,c"
+    #              utils_concatena "-" "foo" "bar"     → "foo-bar"
+    #              utils_concatena " " "x" "y"         → "x y"
+    local delimiter="${1:- }"
+    shift
+    
+    local result=""
+    for item in "$@"; do
+        [[ -n "$result" ]] && result+="$delimiter"
+        result+="$item"
+    done
+    echo "$result"
+}
+
+function separa() {
+    # Divide uma string em elementos usando o delimitador informado.
+    # Se nenhum delimitador for fornecido, usa espaço como padrão.
+    # Os elementos resultantes são impressos separados por espaço.
+    # Modo de uso: separa "a,b,c" ","    → a b c
+    #              separa "foo bar baz"  → foo bar baz
+    local string="$1"
+
+    if [ -n "$2" ]; then
+        local delimiter="$2"
+    else
+        local delimiter=" "
+    fi
+
+    IFS="$delimiter" read -ra result <<< "$string"
+    echo "${result[@]}"
+}
+
+function trim() {
+    # Remove espaços (e outros whitespace) do início e do fim da string.
+    # Usa apenas expansão de parâmetros do Bash, sem ferramentas externas.
+    # Modo de uso: trim "  olá mundo  "   → "olá mundo"
+    #              nome=$(trim "$nome")
+    local string="$1"
+    # Remove whitespace do início
+    string="${string#"${string%%[![:space:]]*}"}"
+    # Remove whitespace do fim
+    string="${string%"${string##*[![:space:]]}"}"
+    echo "$string"
+}
+
+function maiusculas() {
+    # Converte todos os caracteres da string para maiúsculas.
+    # Modo de uso: maiusculas "hello world"   → "HELLO WORLD"
+    echo "${1^^}"
+}
+
+function minusculas() {
+    # Converte todos os caracteres da string para minúsculas.
+    # Modo de uso: minusculas "HELLO WORLD"   → "hello world"
+    echo "${1,,}"
+}
+
+function comeca_com() {
+    # Retorna 0 se a string começa com o prefixo informado, 1 caso contrário.
+    # Modo de uso: comeca_com "arquivo.log" "arquivo"  → 0 (verdadeiro)
+    #              comeca_com "arquivo.log" "log"       → 1 (falso)
+    [[ "$1" == "$2"* ]]
+}
+
+function termina_com() {
+    # Retorna 0 se a string termina com o sufixo informado, 1 caso contrário.
+    # Modo de uso: termina_com "arquivo.log" ".log"   → 0 (verdadeiro)
+    #              termina_com "arquivo.log" ".txt"   → 1 (falso)
+    [[ "$1" == *"$2" ]]
+}
+
+function contem() {
+    # Retorna 0 se a string contém a substring informada, 1 caso contrário.
+    # Modo de uso: contem "erro crítico no sistema" "crítico"   → 0 (verdadeiro)
+    #              contem "erro crítico no sistema" "aviso"     → 1 (falso)
+    [[ "$1" == *"$2"* ]]
+}
+
+function preenche_esquerda() {
+    # Preenche a string à esquerda até atingir a largura desejada (alinha à direita).
+    # O caractere de preenchimento padrão é espaço.
+    # Se a string já for maior ou igual à largura, retorna a string sem alteração.
+    # Modo de uso: preenche_esquerda "42" 6        → "    42"
+    #              preenche_esquerda "42" 6 "0"    → "000042"
+    local string="$1"
+    local largura="$2"
+    local caractere="${3:- }"
+    local pad=$(( largura - ${#string} ))
+
+    if [ "$pad" -le 0 ]; then
+        echo "$string"
+        return
+    fi
+
+    local padding
+    padding=$(printf "%${pad}s" "" | tr ' ' "$caractere")
+    echo "${padding}${string}"
+}
+
+function preenche_direita() {
+    # Preenche a string à direita até atingir a largura desejada (alinha à esquerda).
+    # O caractere de preenchimento padrão é espaço.
+    # Se a string já for maior ou igual à largura, retorna a string sem alteração.
+    # Modo de uso: preenche_direita "nome" 10          → "nome      "
+    #              preenche_direita "nome" 10 "-"       → "nome------"
+    local string="$1"
+    local largura="$2"
+    local caractere="${3:- }"
+    local pad=$(( largura - ${#string} ))
+
+    if [ "$pad" -le 0 ]; then
+        echo "$string"
+        return
+    fi
+
+    local padding
+    padding=$(printf "%${pad}s" "" | tr ' ' "$caractere")
+    echo "${string}${padding}"
+}
+
+function repete() {
+    # Repete a string N vezes, concatenando sem separador.
+    # Modo de uso: repete "ab" 3     → "ababab"
+    #              repete "-" 20     → "--------------------"
+    local string="$1"
+    local vezes="$2"
+    local saida=""
+
+    for (( i = 0; i < vezes; i++ )); do
+        saida+="$string"
+    done
+
+    echo "$saida"
+}
+
+function campo() {
+    # Extrai um campo específico de cada linha lida do stdin usando um delimitador.
+    # Modo de uso: df -h | campo 5     → coluna 5 de cada linha (ex: "Use%")
+    #              echo "a:b:c" | campo 2 ":"  → "b"
+    awk -F "${2:- }" "{ print \$${1:-1} }"
+}
+
+function total() {
+    # Soma os valores numéricos de um campo específico em todas as linhas do stdin.
+    # Modo de uso: du -sb /var/log/* | total 1   → soma dos tamanhos em bytes
+    #              cat vendas.csv | total 3 ","   → soma da coluna 3
+    awk -F "${2:- }" "{ s += \$${1:-1} } END { print s }"
+}
+
+================================================================
+ ARQUIVO: lib/validau.sh
+================================================================
+# shellcheck shell=bash
+# validau.sh - Funções para validação de dados de entrada
+#
+# Fornece validações para os tipos de dados mais comuns em scripts de automação.
+# Todas as funções retornam 0 se o valor for válido e 1 caso contrário,
+# seguindo a convenção de retorno do Bash para uso em condicionais.
+#
+# Dependências: nenhuma
+#
+# Funções disponíveis:
+#   valida_ip            <string>          - Valida endereço IPv4
+#   valida_email         <string>          - Valida formato de e-mail
+#   valida_url           <string>          - Valida URL com esquema http/https/ftp
+#   valida_porta         <numero>          - Valida número de porta (1-65535)
+#   variavel_obrigatoria <nome> [mensagem] - Aborta se variável de ambiente não estiver definida
+
+
+[[ -n "${_VALIDAU_SH_LOADED:-}" ]] && return 0
+readonly _VALIDAU_SH_LOADED=1
+
+function valida_ip() {
+    # Verifica se a string é um endereço IPv4 válido no formato A.B.C.D,
+    # onde cada octeto está entre 0 e 255.
+    # Modo de uso: valida_ip "192.168.1.1" && echo "IP válido"
+    local ip="$1"
+    local regex='^([0-9]{1,3}\.){3}[0-9]{1,3}$'
+
+    if [[ ! "$ip" =~ $regex ]]; then
+        return 1
+    fi
+
+    # Verifica se cada octeto está no intervalo válido (0-255)
+    local IFS='.'
+    local partes=( "$ip" )
+    for parte in "${partes[@]}"; do
+        if [ "$parte" -gt 255 ]; then
+            return 1
+        fi
+    done
+
+    return 0
+}
+
+function valida_email() {
+    # Valida o formato de um endereço de e-mail.
+    # Aceita caracteres alfanuméricos e os especiais . _ % + - antes do @,
+    # domínios com múltiplos níveis (ex: user@mail.co.uk) e extensões de 2+
+    # caracteres. Não valida a existência real do endereço.
+    # Modo de uso: valida_email "usuario@dominio.com" && echo "E-mail válido"
+    local email="$1"
+    local regex='^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    [[ "$email" =~ $regex ]]
+}
+
+function valida_url() {
+    # Verifica se a string é uma URL com esquema válido (http, https ou ftp)
+    # seguido de host e caminho opcional.
+    # Modo de uso: valida_url "https://exemplo.com/pagina" && echo "URL válida"
+    local url="$1"
+    local regex='^(https?|ftp)://[a-zA-Z0-9.-]+(:[0-9]+)?(/.*)?$'
+    [[ "$url" =~ $regex ]]
+}
+
+function valida_porta() {
+    # Verifica se o valor é um número de porta TCP/UDP válido (entre 1 e 65535).
+    # Modo de uso: valida_porta "8080" && echo "Porta válida"
+    local porta="$1"
+    [[ "$porta" =~ ^[0-9]+$ ]] && [ "$porta" -ge 1 ] && [ "$porta" -le 65535 ]
+}
+
+function variavel_obrigatoria() {
+    # Verifica se uma variável de ambiente está definida e não está vazia.
+    # Se não estiver, exibe uma mensagem de erro e encerra o script com código 1.
+    # Útil para garantir que configurações críticas foram fornecidas antes
+    # de iniciar operações que dependem delas.
+    # Modo de uso: variavel_obrigatoria DB_HOST
+    #              variavel_obrigatoria API_KEY "A chave da API é obrigatória"
+    local nome="$1"
+    local mensagem="${2:-Variável de ambiente obrigatória não definida: $nome}"
+
+    if [ -z "${!nome}" ]; then
+        echo "ERRO: $mensagem" >&2
+        exit 1
+    fi
+}
+
+
+================================================================
+ ARQUIVO: lib/version.sh
+================================================================
+# shellcheck shell=bash
+# version.sh - Metadados e informações de versão da biblioteca bashbase
+#
+# Expõe a versão atual, dados de autoria e licença como variáveis readonly,
+# além de uma função para exibição formatada dessas informações.
+# A versão é lida do arquivo VERSION na raiz do repositório, mantendo
+# uma única fonte canônica.
+#
+# Dependências: nenhuma
+#
+# Variáveis exportadas:
+#   BASHBASE_VERSION       - Versão atual (ex: 1.0.0)
+#   BASHBASE_RELEASE_DATE  - Data da release atual (AAAA-MM-DD)
+#   BASHBASE_AUTHOR        - Nome do autor
+#   BASHBASE_AUTHOR_EMAIL  - E-mail do autor
+#   BASHBASE_LICENSE       - Licença do projeto
+#
+# Funções disponíveis:
+#   bashbase_versao        - Exibe versão, autoria e licença no stdout
+
+[[ -n "${_VERSION_SH_LOADED:-}" ]] && return 0
+readonly _VERSION_SH_LOADED=1
+
+BASHBASE_VERSION=$(< "$(dirname "${BASH_SOURCE[0]}")/../VERSION")
+BASHBASE_VERSION="${BASHBASE_VERSION//$'\n'/}"
+readonly BASHBASE_VERSION
+
+readonly BASHBASE_RELEASE_DATE="2026-03-29"
+readonly BASHBASE_AUTHOR="kaliope"
+readonly BASHBASE_AUTHOR_EMAIL=""
+readonly BASHBASE_LICENSE="MIT"
+
+# bashbase_versao
+#   Exibe versão, data de release, autoria e licença no stdout.
+bashbase_versao() {
+    echo "bashbase v${BASHBASE_VERSION} (${BASHBASE_RELEASE_DATE})"
+    echo "Autor:   ${BASHBASE_AUTHOR}${BASHBASE_AUTHOR_EMAIL:+ <${BASHBASE_AUTHOR_EMAIL}>}"
+    echo "Licença: ${BASHBASE_LICENSE}"
+}
+
