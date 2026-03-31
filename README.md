@@ -1,5 +1,11 @@
 # bashbase
 
+![License](https://img.shields.io/github/license/italberto/bashbase)
+![Version](https://img.shields.io/github/v/release/italberto/bashbase)
+![Shell](https://img.shields.io/badge/shell-bash-green)
+![Stars](https://img.shields.io/github/stars/italberto/bashbase)
+![Maintained](https://img.shields.io/badge/maintained-yes-brightgreen)
+
 Biblioteca de funções Bash para automação de sistemas. Agrupa utilitários comuns em módulos independentes e reutilizáveis — saída colorida, logging, retry, spinners, inputs interativos, gerenciamento de processos, backups, conectividade e muito mais.
 
 A biblioteca é organizada em duas camadas:
@@ -15,7 +21,7 @@ A biblioteca é organizada em duas camadas:
 ## Instalação
 
 ```bash
-git clone https://github.com/seu-usuario/bashbase.git ~/bashbase
+git clone https://github.com/italberto/bashbase.git ~/bashbase
 cd ~/bashbase && bash install.sh
 ```
 
