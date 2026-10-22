@@ -22,6 +22,35 @@ readonly _CONFIGU_SH_LOADED=1
 
 source "$(dirname "${BASH_SOURCE[0]}")/dryrun.sh"
 
+function _config_primeira_linha() {
+    # Imprime a primeira linha de <arquivo> que começa com "<chave>=".
+    # A comparação é literal (a chave nunca é interpretada como regex),
+    # mas ancorada no início da linha via index()==1.
+    # Retorna 1 se o arquivo não existir ou nenhuma linha casar.
+    local arquivo="$1"
+    local chave="$2"
+    awk -v k="${chave}=" 'index($0, k) == 1 { print; achou=1; exit } END { exit !achou }' "$arquivo" 2>/dev/null
+}
+
+function _config_reescrever() {
+    # Reescreve <arquivo> aplicando o filtro awk recebido, preservando o
+    # arquivo original (inode/permissões) via cópia do conteúdo.
+    # Usado por config_escrever e config_remover. Não usa regex: a chave é
+    # sempre comparada literalmente com index(), evitando injeção de padrões.
+    local arquivo="$1"
+    shift
+    local tmp rc
+    tmp=$(mktemp) || return 1
+    if awk "$@" "$arquivo" > "$tmp"; then
+        cat "$tmp" > "$arquivo"
+        rc=$?
+    else
+        rc=1
+    fi
+    rm -f "$tmp"
+    return "$rc"
+}
+
 function config_ler() {
     # Lê e retorna o valor de uma chave em um arquivo de configuração.
     # Remove aspas simples e duplas simétricas ao redor do valor, se presentes.
@@ -35,14 +64,10 @@ function config_ler() {
         return 1
     fi
 
-    # Verifica existência com -F (string literal) antes de ler o valor,
-    # para distinguir chave ausente de chave com valor vazio.
-    if ! grep -qF "^${chave}=" "$arquivo"; then
-        return 1
-    fi
-
+    # Localiza a primeira linha "chave=..." e extrai o valor. O retorno 1 do
+    # helper distingue corretamente chave ausente de chave com valor vazio.
     local linha valor
-    linha=$(grep -F "^${chave}=" "$arquivo" | head -n1)
+    linha=$(_config_primeira_linha "$arquivo" "$chave") || return 1
     valor="${linha#*=}"
 
     # Remove aspas simétricas ao redor do valor
@@ -61,7 +86,7 @@ function config_existe() {
     local arquivo="$1"
     local chave="$2"
     [[ ! -f "$arquivo" ]] && return 1
-    grep -qF "^${chave}=" "$arquivo"
+    _config_primeira_linha "$arquivo" "$chave" >/dev/null
 }
 
 function config_escrever() {
@@ -74,14 +99,14 @@ function config_escrever() {
     local chave="$2"
     local valor="$3"
 
-    if grep -qF "^${chave}=" "$arquivo" 2>/dev/null; then
-        # Escapa caracteres especiais do sed na chave (padrão BRE, delimitador |)
-        local chave_esc valor_esc
-        chave_esc=$(printf '%s' "$chave" | sed 's/[]\[.*^$()\\|]/\\&/g')
-        # Escapa & \ e o delimitador | na parte de substituição
-        valor_esc=$(printf '%s' "$valor" | sed 's/[\\&|]/\\&/g')
+    if _config_primeira_linha "$arquivo" "$chave" >/dev/null; then
+        # Substitui a primeira ocorrência de "chave=..." por "chave=valor".
+        # Comparação literal via index(); chave e valor passam por variáveis
+        # awk (-v), sem interpretação de regex.
         dryrun_exec "config_escrever: substituir '${chave}' em '$arquivo'" \
-            sed -i "s|^${chave_esc}=.*|${chave}=${valor_esc}|" "$arquivo"
+            _config_reescrever "$arquivo" \
+            -v k="${chave}=" -v nova="${chave}=${valor}" \
+            '!feito && index($0, k) == 1 { print nova; feito=1; next } { print }'
     else
         dryrun_gravar "$arquivo" "${chave}=${valor}"
     fi
@@ -98,11 +123,10 @@ function config_remover() {
         return 1
     fi
 
-    # Escapa caracteres especiais do sed na chave (endereço BRE, delimitador |)
-    local chave_esc
-    chave_esc=$(printf '%s' "$chave" | sed 's/[]\[.*^$()\\|]/\\&/g')
+    # Remove toda linha "chave=...". Comparação literal via index(), sem regex.
     dryrun_exec "config_remover: remover '${chave}' de '$arquivo'" \
-        sed -i "\|^${chave_esc}=|d" "$arquivo"
+        _config_reescrever "$arquivo" \
+        -v k="${chave}=" 'index($0, k) == 1 { next } { print }'
 }
 
 function config_carregar() {

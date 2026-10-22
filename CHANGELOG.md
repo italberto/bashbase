@@ -9,6 +9,17 @@ e este projeto adota [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ## [Não lançado]
 
+### Corrigido
+- `configu.sh`: `config_ler`, `config_existe` e `config_escrever` não encontravam chaves existentes (a troca para `grep -F` tornara o `^` literal, quebrando a âncora de início de linha)
+- `configu.sh`: `config_escrever` duplicava chaves e `config_remover` não removia nada, devido a escape de `sed` malformado (`[.` interpretado como símbolo de colação POSIX)
+- Correspondência de chave agora é feita com `awk index()` — literal e ancorada, sem interpretar a chave como regex
+
+### Adicionado
+- Testes unitários em `tests/unit/teste_configu.sh` cobrindo leitura, escrita in-place, remoção e chaves/valores com metacaracteres
+
+### Removido
+- `projeto_completo.txt` — dump concatenado do projeto que não deveria estar versionado
+
 ## [1.2.0] - 2026-03-30
 
 ### Adicionado
